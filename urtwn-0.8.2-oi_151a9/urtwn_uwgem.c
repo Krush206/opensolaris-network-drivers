@@ -67,6 +67,7 @@ TODO:
 #include "uwgem.h"
 
 #undef SLOT
+#undef __packed
 #define	__packed	__attribute((packed))
 #define	BIT(n)	(1U << (n))
 #define	N(a)	(sizeof (a) / sizeof ((a)[0]))
