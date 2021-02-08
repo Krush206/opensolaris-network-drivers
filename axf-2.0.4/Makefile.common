@@ -1,0 +1,87 @@
+#
+# Rule for make 32bit binaries
+#
+${BINDIR32}/axf:	${BINDIR32}/axf_usbgem.o ${BINDIR32}/usbgem.o
+	$(LD) -r ${LDFLAGS} ${BINDIR32}/axf_usbgem.o ${BINDIR32}/usbgem.o -o $@
+
+${BINDIR32}/axf_usbgem.o:	axf_usbgem.c usbgem_mii.h ax88172reg.h usbgem.h Makefile.config version
+	$(CC) -c ${CFLAGS32} axf_usbgem.c -o $@
+
+${BINDIR32}/usbgem.o:	usbgem.c usbgem_mii.h usbgem.h Makefile.config version
+	$(CC) -c ${CFLAGS32} usbgem.c -o $@
+
+#
+# Rule for make 64bit binaries
+#
+${BINDIR64}/axf:	${BINDIR64}/axf_usbgem.o ${BINDIR64}/usbgem.o
+	$(LD) -r ${LDFLAGS} ${BINDIR64}/axf_usbgem.o ${BINDIR64}/usbgem.o -o $@
+
+${BINDIR64}/axf_usbgem.o:	axf_usbgem.c usbgem_mii.h ax88172reg.h usbgem.h Makefile.config version
+	$(CC) -c ${CFLAGS64} axf_usbgem.c -o $@
+
+${BINDIR64}/usbgem.o:	usbgem.c usbgem_mii.h usbgem.h Makefile.config version
+	$(CC) -c ${CFLAGS64} usbgem.c -o $@
+#
+# For debugging
+#
+axf_usbgem.i:	axf_usbgem.c
+	$(CC) -E ${CFLAGS} axf_usbgem.c -o $@
+
+#
+# Rule for installation and uninstallation
+#
+install32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/axf
+
+install64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/axf
+
+/etc/system.noaxf:	/etc/system
+	cp /etc/system /etc/system.noaxf
+	echo "exclude: axf" >> /etc/system.noaxf
+
+uninstall32:
+	${RM} ${INSTALLDIR32}/axf
+
+uninstall64:
+	${RM} ${INSTALLDIR64}/axf
+
+dist:
+	-rm -rf ${DISTDIR}
+	-mkdir  ${DISTDIR}
+	-mkdir  ${DISTDIR}/i386
+	-mkdir  ${DISTDIR}/amd64
+	-mkdir  ${DISTDIR}/sparc
+	-mkdir  ${DISTDIR}/sparcv9
+	ln -s amd64 ${DISTDIR}/obj
+	/usr/sbin/install -f ${DISTDIR} -m 444 COPYING
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.txt
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.japanese-euc
+	/usr/sbin/install -f ${DISTDIR} -m 444 version
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.macros
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld2
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld3
+	ln -s Makefile.config_gld2 ${DISTDIR}/Makefile.config
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.common
+	ln -s Makefile.amd64_gcc ${DISTDIR}/Makefile
+	/usr/sbin/install -f ${DISTDIR} -m 444 usbgem_mii.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 ax88172reg.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 usbgem.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 axf_usbgem.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 usbgem.c
+	/usr/sbin/install -f ${DISTDIR} -m 755 adddrv.sh
+	cp -r i386 amd64 sparc sparcv9 ${DISTDIR}
+
+clean32:
+	${RM} ${BINDIR32}/*
+
+clean64:
+	${RM} ${BINDIR64}/*

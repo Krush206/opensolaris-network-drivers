@@ -1,0 +1,206 @@
+#
+# 32bit binaries
+#
+FWOBJ32 += ${BINDIR32}/e1000_80003es2lan.o
+FWOBJ32 += ${BINDIR32}/e1000_82540.o
+FWOBJ32 += ${BINDIR32}/e1000_82541.o
+FWOBJ32 += ${BINDIR32}/e1000_82542.o
+FWOBJ32 += ${BINDIR32}/e1000_82543.o
+FWOBJ32 += ${BINDIR32}/e1000_82571.o
+#FWOBJ32 += ${BINDIR32}/e1000_82575.o
+FWOBJ32 += ${BINDIR32}/e1000_api.o
+FWOBJ32 += ${BINDIR32}/e1000_ich8lan.o
+FWOBJ32 += ${BINDIR32}/e1000_mac.o
+FWOBJ32 += ${BINDIR32}/e1000_manage.o
+FWOBJ32 += ${BINDIR32}/e1000_nvm.o
+FWOBJ32 += ${BINDIR32}/e1000_phy.o
+#
+# 64bit binaries
+#
+FWOBJ64 += ${BINDIR64}/e1000_80003es2lan.o
+FWOBJ64 += ${BINDIR64}/e1000_82540.o
+FWOBJ64 += ${BINDIR64}/e1000_82541.o
+FWOBJ64 += ${BINDIR64}/e1000_82542.o
+FWOBJ64 += ${BINDIR64}/e1000_82543.o
+FWOBJ64 += ${BINDIR64}/e1000_82571.o
+#FWOBJ64 += ${BINDIR64}/e1000_82575.o
+FWOBJ64 += ${BINDIR64}/e1000_api.o
+FWOBJ64 += ${BINDIR64}/e1000_ich8lan.o
+FWOBJ64 += ${BINDIR64}/e1000_mac.o
+FWOBJ64 += ${BINDIR64}/e1000_manage.o
+FWOBJ64 += ${BINDIR64}/e1000_nvm.o
+FWOBJ64 += ${BINDIR64}/e1000_phy.o
+#
+# Rule for make 32bit binaries
+#
+${BINDIR32}/em:	${FIRMWARE} ${FWOBJ32} ${BINDIR32}/em_gem.o ${BINDIR32}/gem.o
+	$(LD) ${LDFLAGS} -r ${BINDIR32}/em_gem.o ${BINDIR32}/gem.o \
+		${FWOBJ32} -o $@
+
+${BINDIR32}/em_gem.o:	em_gem.c gem_mii.h gem.h Makefile.config version ${FIRMWARE}/src/e1000_api.h
+	$(CC) -c -I. -I${FIRMWARE}/src ${CFLAGS32} em_gem.c -o $@
+
+${BINDIR32}/gem.o:	gem.c gem_mii.h gem.h Makefile.config version
+	$(CC) -c ${CFLAGS32} gem.c -o $@
+
+${BINDIR32}/e1000_80003es2lan.o: ${FIRMWARE}/src/e1000_80003es2lan.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_80003es2lan.c -o $@
+
+${BINDIR32}/e1000_82540.o:	${FIRMWARE}/src/e1000_82540.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_82540.c -o $@
+
+${BINDIR32}/e1000_82541.o: ${FIRMWARE}/src/e1000_82541.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_82541.c -o $@
+
+${BINDIR32}/e1000_82542.o: ${FIRMWARE}/src/e1000_82542.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_82542.c -o $@
+
+${BINDIR32}/e1000_82543.o: ${FIRMWARE}/src/e1000_82543.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_82543.c -o $@
+
+${BINDIR32}/e1000_82571.o: ${FIRMWARE}/src/e1000_82571.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_82571.c -o $@
+
+#${BINDIR32}/e1000_82575.o: ${FIRMWARE}/src/e1000_82575.c e1000_osdep.h
+#	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_82575.c -o $@
+
+${BINDIR32}/e1000_api.o: ${FIRMWARE}/src/e1000_api.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_api.c -o $@
+
+${BINDIR32}/e1000_ich8lan.o: ${FIRMWARE}/src/e1000_ich8lan.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_ich8lan.c -o $@
+
+${BINDIR32}/e1000_mac.o: ${FIRMWARE}/src/e1000_mac.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_mac.c -o $@
+
+${BINDIR32}/e1000_manage.o: ${FIRMWARE}/src/e1000_manage.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_manage.c -o $@
+
+${BINDIR32}/e1000_nvm.o: ${FIRMWARE}/src/e1000_nvm.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_nvm.c -o $@
+
+${BINDIR32}/e1000_phy.o: ${FIRMWARE}/src/e1000_phy.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS32} ${FIRMWARE}/src/e1000_phy.c -o $@
+#
+#
+# Rule for make 64bit binaries
+#
+${BINDIR64}/em:	${FIRMWARE} ${FWOBJ64} ${BINDIR64}/em_gem.o ${BINDIR64}/gem.o
+	$(LD) ${LDFLAGS} -r ${BINDIR64}/em_gem.o ${BINDIR64}/gem.o \
+		${FWOBJ64} -o $@
+
+${BINDIR64}/em_gem.o:	em_gem.c gem_mii.h gem.h Makefile.config version ${FIRMWARE}/src/e1000_api.h
+	$(CC) -c -I. -I${FIRMWARE}/src ${CFLAGS64} em_gem.c -o $@
+
+${BINDIR64}/gem.o:	gem.c gem_mii.h gem.h Makefile.config version
+	$(CC) -c ${CFLAGS64} gem.c -o $@
+
+${BINDIR64}/e1000_80003es2lan.o: ${FIRMWARE}/src/e1000_80003es2lan.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_80003es2lan.c -o $@
+
+${BINDIR64}/e1000_82540.o:	${FIRMWARE}/src/e1000_82540.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_82540.c -o $@
+
+${BINDIR64}/e1000_82541.o: ${FIRMWARE}/src/e1000_82541.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_82541.c -o $@
+
+${BINDIR64}/e1000_82542.o: ${FIRMWARE}/src/e1000_82542.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_82542.c -o $@
+
+${BINDIR64}/e1000_82543.o: ${FIRMWARE}/src/e1000_82543.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_82543.c -o $@
+
+${BINDIR64}/e1000_82571.o: ${FIRMWARE}/src/e1000_82571.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_82571.c -o $@
+
+#${BINDIR64}/e1000_82575.o: ${FIRMWARE}/src/e1000_82575.c e1000_osdep.h
+#	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_82575.c -o $@
+
+${BINDIR64}/e1000_api.o: ${FIRMWARE}/src/e1000_api.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_api.c -o $@
+
+${BINDIR64}/e1000_ich8lan.o: ${FIRMWARE}/src/e1000_ich8lan.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_ich8lan.c -o $@
+
+${BINDIR64}/e1000_mac.o: ${FIRMWARE}/src/e1000_mac.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_mac.c -o $@
+
+${BINDIR64}/e1000_manage.o: ${FIRMWARE}/src/e1000_manage.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_manage.c -o $@
+
+${BINDIR64}/e1000_nvm.o: ${FIRMWARE}/src/e1000_nvm.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_nvm.c -o $@
+
+${BINDIR64}/e1000_phy.o: ${FIRMWARE}/src/e1000_phy.c e1000_osdep.h
+	$(CC) -c -I. ${CFLAGS64} ${FIRMWARE}/src/e1000_phy.c -o $@
+#
+# 
+${FIRMWARE}:
+	gunzip -cd ${FIRMWARE}.tar.gz | tar xf -
+	mv ${FIRMWARE}/src/e1000_osdep.h ${FIRMWARE}/src/e1000_osdep.h.org
+
+#
+# For debugging
+#
+em_gem.i:	em_gem.c
+	$(CC) -E ${CFLAGS} em_gem.c -o $@
+
+#
+# Rule for installation and uninstallation
+#
+install32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/em
+
+install64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/em
+
+/etc/system.noem:	/etc/system
+	cp /etc/system /etc/system.noem
+	echo "exclude: em" >> /etc/system.noem
+
+uninstall32:
+	${RM} ${INSTALLDIR32}/em
+
+uninstall64:
+	${RM} ${INSTALLDIR64}/em
+
+dist:
+	-rm -rf ${DISTDIR}
+	-mkdir  ${DISTDIR}
+	-mkdir  ${DISTDIR}/i386
+	-mkdir  ${DISTDIR}/amd64
+	-mkdir  ${DISTDIR}/sparc
+	-mkdir  ${DISTDIR}/sparcv9
+	ln -s i386 ${DISTDIR}/obj
+	/usr/sbin/install -f ${DISTDIR} -m 444 COPYING
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.txt
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.japanese-euc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.macros
+	/usr/sbin/install -f ${DISTDIR} -m 444 version
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld2
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld3
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.common
+	ln -s Makefile.i386_gcc ${DISTDIR}/Makefile
+	ln -s Makefile.config_gld2 ${DISTDIR}/Makefile.config
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem_mii.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 em_gem.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem.c
+	/usr/sbin/install -f ${DISTDIR} -m 755 adddrv.sh
+	/usr/sbin/install -f ${DISTDIR} -m 444 e1000_osdep.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 ${FIRMWARE}.tar.gz
+	cp -r i386 amd64 sparc sparcv9 ${DISTDIR}
+
+clean32:
+	${RM} ${BINDIR32}/*
+
+clean64:
+	${RM} ${BINDIR64}/*

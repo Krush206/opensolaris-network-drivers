@@ -1,0 +1,13 @@
+#
+# Common configuration infomations for all platforms
+#
+DRV	= icpt
+include version
+
+DFLAGS	= -DDEBUG -DDEBUG_LEVEL=0 -UGEM_DEBUG_LEVEL -UTEST_CRCERR
+
+#
+CFGFLAGS = -UUSE_FRAMEID -DMAP_MEM -DGEM_CONFIG_POLLING \
+	   -UGEM_CONFIG_CKSUM_OFFLOAD -UGEM_CONFIG_VLAN -UCONFIG_VLAN
+
+LDFLAGS += -dy -N misc/gld

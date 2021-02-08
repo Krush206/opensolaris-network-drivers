@@ -1,0 +1,22 @@
+#
+# Common configuration infomations for all platforms
+#
+DRV	= udmf
+include version
+ONUTSDIR = /home/mrym/opensolaris/latest/onnv-gate/usr/src/uts
+
+CROSS_KERNEL_HEADERS = -I $(ONUTSDIR)/common -I$ $(ONUTSDIR)/intel
+
+#KFLAGS_COMMON += $(CROSS_KERNEL_HEADERS)
+KFLAGS_SUNCC += -erroff=E_STATEMENT_NOT_REACHED,E_INTEGER_OVERFLOW_DETECTED
+
+DFLAGS	= -DDEBUG -DDEBUG_LEVEL=1 -DUSBGEM_DEBUG_LEVEL=0 \
+	  -DCONFIG_TX_LIMITER -DNEW
+
+CFGFLAGS = -DUSBGEM_CONFIG_GLDv3 \
+	   -UUSBGEM_CONFIG_ND -DUSBGEM_CONFIG_MAC_PROP \
+	   -Unotdef -UNEVER -UUSBGEM_GCC_RUNTIME \
+	   -USANITY -UMODULE \
+	   -UCONFIG_VLAN
+
+LDFLAGS	+= -dy -N misc/mac -N drv/ip -N misc/usba

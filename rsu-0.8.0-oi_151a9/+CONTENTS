@@ -1,0 +1,14 @@
+@name rsu-firmware-1.1
+@option explicit-update
+@comment subdir=sysutils/rsu-firmware cdrom=yes ftp=yes
+@arch *
++DESC
+@sha qEzoPNH5fkzZFNqeDezcskbdEZmFIsPdCyJ3KcA0qIc=
+@size 172
+@cwd /etc
+firmware/rsu-rtl8712fw
+@sha 1vsp7HDsMfJLk14a4hnaujQerI3tmrkpPBB4rLZkZCA=
+@size 125592
+firmware/rsu-license
+@sha /YQ4bWJ9r258p/e0iiFmajcMVjXBNSDjjS1OWMF5wiM=
+@size 2231

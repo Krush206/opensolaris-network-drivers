@@ -1,0 +1,27 @@
+#
+# Common configuration infomations for all platforms
+#
+DRV	= etge
+include version
+#ONUTSDIR = /home/mrym/opensolaris/latest/onnv-gate/usr/src/uts
+ONUTSDIR = /home/mrym/opensolaris/ws-b124/usr/src/uts
+PUTBACKDIR = $(ONUTSDIR}/common/io/etge
+
+DFLAGS	= -DDEBUG -DDEBUG_LEVEL=1 -DGEM_DEBUG_LEVEL=0 -UTEST_RX_EMPTY \
+	  -UDEBUG_RESUME -UTEST_LATMEN -DCONFIG_INTR_MSI \
+	  -I ${ONUTSDIR}/common -I ${ONUTSDIR}/intel \
+	  -erroff=E_STATEMENT_NOT_REACHED,E_INTEGER_OVERFLOW_DETECTED
+#
+#
+#
+CFGFLAGS = -DGEM_CONFIG_POLLING -DGEM_CONFIG_GLDv3 -DGEM_CONFIG_VLAN_HW \
+	   -DGEM_CONFIG_CKSUM_OFFLOAD -DSOLARIS10 -DGEM_CONFIG_JUMBO_FRAME \
+	   -UGEM_CONFIG_ND -DGEM_CONFIG_MAC_PROP \
+	   -Unotdef -UNEVER -UGEM_GCC_RUNTIME \
+	   -UGEM_COMPAT -USANITY -UGEM_CONFIG_FMA -UMODULE \
+	   -UGEM_CONFIG_RX_DIRECT -DGEM_CONFIG_TX_DIRECT \
+	   -DGEM_CONFIG_TX_HEAD_PTR \
+	   -UOS_PUTBACK \
+	   -UCONFIG_OFFLOAD
+
+LDFLAGS += -dy -N misc/mac -N drv/ip

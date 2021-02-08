@@ -1,0 +1,33 @@
+Package history for NFORCE-Linux-x86_64-1.0-0310:
+
+NFORCE-Linux-x86_64-1.0-0310-pkg0: Initial package
+
+NFORCE-Linux-x86_64-1.0-0310-pkg1: Added precompiled kernel interfaces for:
+  Red Hat Enterprise Linux WS release 3 kernel 2.4.21-4.EL x86_64 (nvnet)
+  Red Hat Enterprise Linux WS release 3 kernel 2.4.21-4.EL x86_64 (nvsound)
+  Red Hat Enterprise Linux WS release 3 kernel 2.4.21-4.ELsmp x86_64 (nvnet)
+  Red Hat Enterprise Linux WS release 3 kernel 2.4.21-4.ELsmp x86_64 (nvsound)
+  Red Hat Enterprise Linux WS release 3 update 2 kernel 2.4.21-15.EL x86_64 (nvnet)
+  Red Hat Enterprise Linux WS release 3 update 2 kernel 2.4.21-15.EL x86_64 (nvsound)
+  Red Hat Enterprise Linux WS release 3 update 2 kernel 2.4.21-15.ELsmp x86_64 (nvnet)
+  Red Hat Enterprise Linux WS release 3 update 2 kernel 2.4.21-15.ELsmp x86_64 (nvsound)
+  Fedora core 2 kernel 2.6.5-1.358 x86_64 (nvnet)
+  Fedora core 2 kernel 2.6.5-1.358 x86_64 (nvsound)
+  Fedora core 2 kernel 2.6.5-1.358smp x86_64 (nvnet)
+  Fedora core 2 kernel 2.6.5-1.358smp x86_64 (nvsound)
+  Fedora core 2 kernel 2.6.8-1.521 x86_64 (nvnet)
+  Fedora core 2 kernel 2.6.8-1.521 x86_64 (nvsound)
+  Fedora core 2 kernel 2.6.8-1.521smp x86_64 (nvnet)
+  Fedora core 2 kernel 2.6.8-1.521smp x86_64 (nvsound)
+  SuSE Linux 9.1 kernel 2.6.4-52 default (nvnet)
+  SuSE Linux 9.1 kernel 2.6.4-52 default (nvsound)
+  SuSE Linux 9.1 kernel 2.6.4-52 smp (nvnet)
+  SuSE Linux 9.1 kernel 2.6.4-52 smp (nvsound)
+  SuSE Linux 9.1 kernel 2.6.5-7.108 default (nvnet)
+  SuSE Linux 9.1 kernel 2.6.5-7.108 default (nvsound)
+  SuSE Linux 9.1 kernel 2.6.5-7.108 smp (nvnet)
+  SuSE Linux 9.1 kernel 2.6.5-7.108 smp (nvsound)
+  SuSE-ES 9 kernel 2.6.5-7.97 default (nvnet)
+  SuSE-ES 9 kernel 2.6.5-7.97 default (nvsound)
+  SuSE-ES 9 kernel 2.6.5-7.97 smp (nvnet)
+  SuSE-ES 9 kernel 2.6.5-7.97 smp (nvsound)

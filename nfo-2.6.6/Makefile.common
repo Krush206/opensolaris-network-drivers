@@ -1,0 +1,127 @@
+#
+# Rule for make 32bit binaries
+#
+${BINDIR32}/nfo:	${BINDIR32}/nfo_gem.o ${BINDIR32}/gem.o
+	$(LD) -r ${LDFLAGS} ${BINDIR32}/nfo_gem.o ${BINDIR32}/gem.o -o $@
+
+${BINDIR32}/nfo_gem.o:	nfo_gem.c gem_mii.h gem.h nvenetreg.h Makefile.config version
+	$(CC) -c ${CFLAGS32} nfo_gem.c -o $@
+
+${BINDIR32}/gem.o:	gem.c gem_mii.h gem.h Makefile.config
+	$(CC) -c ${CFLAGS32} gem.c -o $@
+
+#
+# Rule for make 64bit binaries
+#
+${BINDIR64}/nfo:	${BINDIR64}/nfo_gem.o ${BINDIR64}/gem.o
+	$(LD) -r ${LDFLAGS} ${BINDIR64}/nfo_gem.o ${BINDIR64}/gem.o -o $@
+
+${BINDIR64}/nfo_gem.o:	nfo_gem.c gem_mii.h gem.h nvenetreg.h Makefile.config version
+	$(CC) -c ${CFLAGS64} nfo_gem.c -o $@
+
+${BINDIR64}/gem.o:	gem.c gem_mii.h gem.h Makefile.config
+	$(CC) -c ${CFLAGS64} gem.c -o $@
+#
+# For debugging
+#
+nfo_gem.i:	nfo_gem.c
+	$(CC) -E ${CFLAGS64} nfo_gem.c -o $@
+
+gem.i:	gem.c
+	$(CC) -E ${CFLAGS32} gem.c -o $@
+#
+# Rule for installation and uninstallation
+#
+install32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/nfo
+
+install64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/nfo
+
+/etc/system.nonfo:	/etc/system
+	cp /etc/system /etc/system.nonfo
+	echo "exclude: nfo" >> /etc/system.nonfo
+	/usr/sbin/install -f ${INSTALLDIR32} -m 644 -u root -g sys nfo.conf
+
+uninstall32:
+	${RM} ${INSTALLDIR32}/nfo
+
+uninstall64:
+	${RM} ${INSTALLDIR64}/nfo
+
+dist:
+	-rm -rf ${DISTDIR}
+	-mkdir  ${DISTDIR}
+	-mkdir  ${DISTDIR}/i386
+	-mkdir  ${DISTDIR}/amd64
+	ln -s i386 ${DISTDIR}/obj
+	/usr/sbin/install -f ${DISTDIR} -m 444 COPYING
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.txt
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.japanese-euc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.macros
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld2
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld3
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.common
+	ln -s Makefile.config_gld2 ${DISTDIR}/Makefile.config
+	ln -s Makefile.i386_gcc ${DISTDIR}/Makefile
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem_mii.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 nfo_gem.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 nvenetreg.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem.c
+	/usr/sbin/install -f ${DISTDIR} -m 755 adddrv.sh
+	/usr/sbin/install -f ${DISTDIR} -m 444 nfo.conf
+	/usr/sbin/install -f ${DISTDIR} -m 444 version
+	cp -r i386 amd64 ${DISTDIR}
+
+clean32:
+	${RM} ${BINDIR32}/*
+
+clean64:
+	${RM} ${BINDIR64}/*
+
+
+putback: ${PUTBACKDIR}/nvenetreg.h \
+	${PUTBACKDIR}/nfo.c \
+	${PUTBACKDIR}/nfo_util.c \
+	${PUTBACKDIR}/nfo_util.h \
+	${PUTBACKDIR}/nfo_mii.h
+
+${PUTBACKDIR}/nfo.c: nfo.c
+	unifdef ${CFGFLAGS} nfo.c > ${PUTBACKDIR}/nfo.c
+	touch -r nfo_gem.c  ${PUTBACKDIR}/nfo.c
+
+${PUTBACKDIR}/nvenetreg.h: nvenetreg.h
+	unifdef ${CFGFLAGS} nvenetreg.h > ${PUTBACKDIR}/nvenetreg.h
+	touch -r nvenetreg.h ${PUTBACKDIR}/nvenetreg.h
+
+${PUTBACKDIR}/nfo_util.h: nfo_util.h
+	unifdef ${CFGFLAGS} nfo_util.h > ${PUTBACKDIR}/nfo_util.h
+	touch -r gem.h ${PUTBACKDIR}/nfo_util.h
+
+${PUTBACKDIR}/nfo_util.c: nfo_util.c
+	unifdef ${CFGFLAGS} nfo_util.c > ${PUTBACKDIR}/nfo_util.c
+	touch -r gem.c ${PUTBACKDIR}/nfo_util.c
+
+${PUTBACKDIR}/nfo_mii.h: nfo_mii.h
+	unifdef ${CFGFLAGS} gem_mii.h > ${PUTBACKDIR}/nfo_mii.h
+	touch -r gem_mii.h ${PUTBACKDIR}/nfo_mii.h
+
+clean_putback:
+	${RM} ${PUTBACKDIR}/*.[ch]
+
+nfo.c: nfo_gem.c
+	sed -e "s/gem\.h/nfo_util\.h/" -e "s/gem_mii\.h/nfo_mii\.h/" -e "s/gem\.c/nfo_util\.c/" nfo_gem.c > nfo.c
+
+nfo_util.c: gem.c
+	sed -e "s/gem\.h/nfo_util\.h/" -e "s/gem_mii\.h/nfo_mii\.h/" -e "s/gem\.c/nfo_util\.c/" gem.c > nfo_util.c
+
+nfo_util.h: gem.h
+	sed -e "s/GEM_H/SFE_UTIL_H/" -e "s/gem\.h/nfo_util\.h/" gem.h > nfo_util.h
+
+nfo_mii.h: gem_mii.h
+	sed -e "s/GEM_MII_H/SFE_MII_H/" -e "s/gem_mii/nfo_mii/" gem_mii.h > nfo_mii.h

@@ -1,0 +1,26 @@
+#
+# Common configuration infomations for all platforms
+#
+DRV	= run
+include version
+GCC = /usr/sfw/bin/i386-pc-solaris2.11-gcc-3.4.3
+NET80211SRC = ./net80211
+
+ONUTSDIR = /home/mrym/opensolaris/ws-b124/usr/src/uts
+#CROSS_KERNEL_HEADERS = -I $(ONUTSDIR)/common -I$ $(ONUTSDIR)/intel 
+NET80211_HEADERS = -I .
+KFLAGS_COMMON += $(NET80211_HEADERS) $(CROSS_KERNEL_HEADERS)
+KFLAGS_SUNCC += -erroff=E_STATEMENT_NOT_REACHED,E_INTEGER_OVERFLOW_DETECTED
+
+DFLAGS	= -DDEBUG -DUWGEM_DEBUG_LEVEL=1 -DDEBUG_LEVEL=1 \
+	  -DNEW_RF2850 -DNEW_LOCK \
+	  -UTEST_ETHER # -UDEBUG_RT30XX=0x30900211
+
+CFGFLAGS = -Unotdef -UNEVER -USANITY \
+	   -DUWGEM_CONFIG_GLDv3 -UWAIT_WRITE \
+	   -DCONFIG_AMPDU -DCONFIG_11N -DCONFIG_MULTISTREAM -DCONFIG_PASSIVE \
+	   -UCONFIG_IBSS -fno-builtin  -fno-builtin-function -ffreestanding \
+	   -DCONFIG_DATAPAD -DCONFIG_AMSDU -DCONFIG_BW40
+
+#LDFLAGS	+= -dy -Nmisc/mac -Nmisc/net80211 -Nmisc/usba
+LDFLAGS	+= -dy -Nmisc/mac -Nmisc/usba

@@ -1,0 +1,157 @@
+#! /bin/csh -f
+#
+set DEVLIST = ( )
+
+set DEVLIST = ( $DEVLIST '"pci8086,100e"' )	# 82540EM
+set DEVLIST = ( $DEVLIST '"pci8086,1015"' )	# 82540EM LOM
+set DEVLIST = ( $DEVLIST '"pci8086,1016"' )	# 82540EP LOM
+set DEVLIST = ( $DEVLIST '"pci8086,1017"' )	# 82540EP
+set DEVLIST = ( $DEVLIST '"pci8086,101e"' )	# 82540EP LP
+
+set DEVLIST = ( $DEVLIST '"pci8086,1013"' )	# 82541EI
+set DEVLIST = ( $DEVLIST '"pci8086,1078"' )	# 82541ER
+set DEVLIST = ( $DEVLIST '"pci8086,1014"' )	# 82541ER LOM
+set DEVLIST = ( $DEVLIST '"pci8086,1018"' )	# 82541EI MOBILE
+set DEVLIST = ( $DEVLIST '"pci8086,1076"' )	# 82541GI
+set DEVLIST = ( $DEVLIST '"pci8086,107c"' )	# 82541GI LF
+set DEVLIST = ( $DEVLIST '"pci8086,1077"' )	# 82541GI MOBILE
+
+set DEVLIST = ( $DEVLIST '"pci8086,1000"' )	# 82542
+
+set DEVLIST = ( $DEVLIST '"pci8086,1001"' )	# 82543GC FIBRE
+set DEVLIST = ( $DEVLIST '"pci8086,1004"' )	# 82543GC COPPER
+
+set DEVLIST = ( $DEVLIST '"pci8086,1008"' )	# 82544EI COPPER
+set DEVLIST = ( $DEVLIST '"pci8086,1009"' )	# 82544EI FIBRE
+set DEVLIST = ( $DEVLIST '"pci8086,100c"' )	# 82544GC COPPER
+set DEVLIST = ( $DEVLIST '"pci8086,100d"' )	# 82544GC LOM
+
+set DEVLIST = ( $DEVLIST '"pci8086,100f"' )	# 82545EM COPPER
+set DEVLIST = ( $DEVLIST '"pci8086,1011"' )	# 82545EM FIBRE
+set DEVLIST = ( $DEVLIST '"pci8086,1026"' )	# 82545EM COPPER
+set DEVLIST = ( $DEVLIST '"pci8086,1027"' )	# 82545EM FIBRE
+set DEVLIST = ( $DEVLIST '"pci8086,1028"' )	# 82545EM SERDES
+
+set DEVLIST = ( $DEVLIST '"pci8086,1010"' )	# 82546EB COPPER
+set DEVLIST = ( $DEVLIST '"pci8086,1012"' )	# 82546EB FIBRE
+set DEVLIST = ( $DEVLIST '"pci8086,101d"' )	# 82546EB QUAD COPPER
+set DEVLIST = ( $DEVLIST '"pci8086,1079"' )	# 82546GB COPPER
+set DEVLIST = ( $DEVLIST '"pci8086,107a"' )	# 82546GB FIBRE
+set DEVLIST = ( $DEVLIST '"pci8086,107b"' )	# 82546GB SERDES
+set DEVLIST = ( $DEVLIST '"pci8086,108a"' )	# 82546GB PCIE
+set DEVLIST = ( $DEVLIST '"pci8086,1099"' )	# 82546GB QUAD COPPER
+set DEVLIST = ( $DEVLIST '"pci8086,10b5"' )	# 82546GB QUAD COPPER KSP3
+
+set DEVLIST = ( $DEVLIST '"pci8086,1019"' )	# 82547EI
+set DEVLIST = ( $DEVLIST '"pci8086,101a"' )	# 82547EI MOBILE
+set DEVLIST = ( $DEVLIST '"pci8086,1075"' )	# 82547GI
+
+set DEVLIST = ( $DEVLIST '"pciex8086,105e"' )	# 82571EB COPPER
+set DEVLIST = ( $DEVLIST '"pciex8086,105f"' )	# 82571EB FIBRE
+set DEVLIST = ( $DEVLIST '"pciex8086,1060"' )	# 82571EB SERDES
+set DEVLIST = ( $DEVLIST '"pciex8086,10d9"' )	# 82571EB SERDES DUAL
+set DEVLIST = ( $DEVLIST '"pciex8086,10da"' )	# 82571EB SERDES QUAD
+set DEVLIST = ( $DEVLIST '"pciex8086,10a4"' )	# 82571EB QUAD COPPER
+set DEVLIST = ( $DEVLIST '"pciex8086,10bc"' )	# 82571EB QUAD COPPER lp
+set DEVLIST = ( $DEVLIST '"pciex8086,10a5"' )	# 82571PT QUAD FIBRE
+set DEVLIST = ( $DEVLIST '"pciex8086,10d5"' )	# 82571PT QUAD COPPER
+
+set DEVLIST = ( $DEVLIST '"pciex8086,107d"' )	# 82572EI COPPER
+set DEVLIST = ( $DEVLIST '"pciex8086,107e"' )	# 82572EI FIBRE
+set DEVLIST = ( $DEVLIST '"pciex8086,107f"' )	# 82572EI SERDES
+set DEVLIST = ( $DEVLIST '"pciex8086,10b9"' )	# 82572EI
+
+set DEVLIST = ( $DEVLIST '"pciex8086,108b"' )	# 82573E
+set DEVLIST = ( $DEVLIST '"pciex8086,108c"' )	# 82573E IAMT
+set DEVLIST = ( $DEVLIST '"pciex8086,109a"' )	# 82573L
+
+set DEVLIST = ( $DEVLIST '"pciex8086,10d3"' )	# 82574L
+set DEVLIST = ( $DEVLIST '"pciex8086,10f6"' )	# 82573LA
+
+set DEVLIST = ( $DEVLIST '"pciex8086,150c"' )	# 82583V
+
+set DEVLIST = ( $DEVLIST '"pci8086,10ba"' )	# 80003ESLAN COPPER SPT
+set DEVLIST = ( $DEVLIST '"pci8086,10bb"' )	# 80003ESLAN SERDES SPT
+set DEVLIST = ( $DEVLIST '"pci8086,1096"' )	# 80003ESLAN COPPER DPT
+set DEVLIST = ( $DEVLIST '"pci8086,1098"' )	# 80003ESLAN SERDES DPT
+
+set DEVLIST = ( $DEVLIST '"pci8086,1501"' )	# ICH8 82567V_3
+set DEVLIST = ( $DEVLIST '"pci8086,1049"' )	# ICH8 IGP M AMT
+set DEVLIST = ( $DEVLIST '"pci8086,104a"' )	# ICH8 IGP AMT
+set DEVLIST = ( $DEVLIST '"pci8086,104b"' )	# ICH8 IGP C
+set DEVLIST = ( $DEVLIST '"pci8086,104c"' )	# ICH8 IFE
+set DEVLIST = ( $DEVLIST '"pci8086,10c4"' )	# ICH8 IFE GT
+set DEVLIST = ( $DEVLIST '"pci8086,10c5"' )	# ICH8 IFE G
+set DEVLIST = ( $DEVLIST '"pci8086,104d"' )	# ICH8 IGP M
+
+set DEVLIST = ( $DEVLIST '"pci8086,10bf"' )	# ICH9 IGP M
+set DEVLIST = ( $DEVLIST '"pci8086,10f5"' )	# ICH9 IGP M AMT
+set DEVLIST = ( $DEVLIST '"pci8086,10cb"' )	# ICH9 IGP M V
+set DEVLIST = ( $DEVLIST '"pci8086,10bd"' )	# ICH9 IGP AMT
+set DEVLIST = ( $DEVLIST '"pci8086,10e5"' )	# ICH9 BM
+set DEVLIST = ( $DEVLIST '"pci8086,294c"' )	# ICH9 IGP C
+set DEVLIST = ( $DEVLIST '"pci8086,10c0"' )	# ICH9 IFE
+set DEVLIST = ( $DEVLIST '"pci8086,10c3"' )	# ICH9 IFE GT
+set DEVLIST = ( $DEVLIST '"pci8086,10c2"' )	# ICH9 IFE G
+
+set DEVLIST = ( $DEVLIST '"pci8086,10cc"' )	# ICH10 R BM LM
+set DEVLIST = ( $DEVLIST '"pci8086,10cd"' )	# ICH10 R BM LF
+set DEVLIST = ( $DEVLIST '"pci8086,10ce"' )	# ICH10 R BM V
+set DEVLIST = ( $DEVLIST '"pci8086,f0fe"' )	# ICH10 HANKSVILLE
+set DEVLIST = ( $DEVLIST '"pci8086,10de"' )	# ICH10 D BM LM
+set DEVLIST = ( $DEVLIST '"pci8086,10df"' )	# ICH10 D BM LF
+set DEVLIST = ( $DEVLIST '"pci8086,1525"' )	# ICH10 D BM V
+
+set DEVLIST = ( $DEVLIST '"pci8086,10ea"' )	# PCH M HV LM
+set DEVLIST = ( $DEVLIST '"pci8086,10eb"' )	# PCH M HV LC
+set DEVLIST = ( $DEVLIST '"pci8086,10ef"' )	# PCH D HV DM
+set DEVLIST = ( $DEVLIST '"pci8086,10f0"' )	# PCH D HV DC
+set DEVLIST = ( $DEVLIST '"pci8086,1502"' )	# PCH2 LV LM
+set DEVLIST = ( $DEVLIST '"pci8086,1503"' )	# PCH2 LV V
+
+set DEVLIST = ( $DEVLIST '"pci8086,153a"' )	# PCH LPT I217 LM
+set DEVLIST = ( $DEVLIST '"pci8086,153b"' )	# PCH LPT I217 V
+set DEVLIST = ( $DEVLIST '"pci8086,155a"' )	# PCH LPTLP I218 LM
+set DEVLIST = ( $DEVLIST '"pci8086,1559"' )	# PCH LPTLP I218 V
+set DEVLIST = ( $DEVLIST '"pci8086,438"' )	# DH89XXCC SGMII
+set DEVLIST = ( $DEVLIST '"pci8086,43a"' )	# DH89XXCC SERDES
+set DEVLIST = ( $DEVLIST '"pci8086,43c"' )	# DH89XXCC BACKPLANE
+set DEVLIST = ( $DEVLIST '"pci8086,440"' )	# DH89XXCC_SFP
+
+
+#set DEVLIST = ( $DEVLIST '"pciex8086,150e"' )	# 82580 COPPER
+#set DEVLIST = ( $DEVLIST '"pciex8086,150f"' )	# 82580 FIBER
+#set DEVLIST = ( $DEVLIST '"pciex8086,1510"' )	# 82580 SERDES
+#set DEVLIST = ( $DEVLIST '"pciex8086,1511"' )	# 82580 SGMII
+#set DEVLIST = ( $DEVLIST '"pciex8086,1516"' )	# 82580 COPPER_DUAL
+#set DEVLIST = ( $DEVLIST '"pciex8086,1527"' )	# 82580 QUAD FIBER
+
+#set DEVLIST = ( $DEVLIST '"pciex8086,10a7"' )	# 82575EB COPPER
+#set DEVLIST = ( $DEVLIST '"pciex8086,10a9"' )	# 82575EB FIBRE SELDES
+#set DEVLIST = ( $DEVLIST '"pciex8086,10d6"' )	# 82575EB QUAD COPPER
+
+#echo $DEVLIST
+
+set DEVLIST2 = ( )
+foreach i ($DEVLIST)
+	set pcidev = `grep $i /etc/driver_aliases`
+#	echo $pcidev
+	if ("$pcidev" == "") then
+		set DEVLIST2 = ( $DEVLIST2 "$i" )
+	endif
+end
+
+#echo $DEVLIST2
+
+if ("$DEVLIST2" == "") then
+	echo nothing to do.
+	exit 1
+endif
+
+set existing = `grep "^em " /etc/driver_aliases`
+if ("$existing" == "") then
+	/usr/sbin/add_drv -n -v -m '* 0600 root sys' -i "$DEVLIST2" em
+else
+	/usr/sbin/update_drv -a -v -m '* 0600 root sys' -i "$DEVLIST2" em
+endif
+sync

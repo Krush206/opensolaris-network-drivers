@@ -1,0 +1,29 @@
+#
+# Common configuration infomations for all platforms
+#
+DRV	= nfo
+include version
+#ONUTSDIR = /home/mrym/opensolaris/usr/src/uts
+#ONUTSDIR = /home/mrym/opensolaris/usr-b105/src/uts
+#ONUTSDIR = /home/mrym/opensolaris/latest/onnv-gate/usr/src/uts
+ONUTSDIR = /home/mrym/opensolaris/ws-b124/usr/src/uts
+PUTBACKDIR = ${ONUTSDIR}/common/io/nfo
+
+DFLAGS	= -DDEBUG -DDEBUG_LEVEL=1 -DGEM_DEBUG_LEVEL=0 -UTEST_TXDESC_FULL \
+	  -UTEST_RX_EMPTY -UDEBUG_HANG -UTEST_BIGENDIAN -UTEST_FOVW \
+	  -UTEST_FMT1 -UTEST_FMT2 -UTEST_NF3 -UDEBUG_TCP_CKSUM \
+	  -UDEBUG_UDP_CKSUM -UDEBUG_TX_SINGLE \
+	  -I ${ONUTSDIR}/common -I ${ONUTSDIR}/intel
+#
+CFGFLAGS = -DGEM_CONFIG_POLLING -DGEM_CONFIG_GLDv3 -DGEM_CONFIG_VLAN_HW \
+	   -DGEM_CONFIG_CKSUM_OFFLOAD -DSOLARIS10 -DGEM_CONFIG_JUMBO_FRAME \
+	   -UGEM_CONFIG_ND -DGEM_CONFIG_MAC_PROP -DGEM_CONFIG_INTR_MSI \
+	   -Unotdef -UNEVER -UGEM_GCC_RUNTIME \
+	   -UGEM_COMPAT -USANITY -UGEM_CONFIG_FMA -UMODULE \
+	   -UGEM_CONFIG_RX_DIRECT -DGEM_CONFIG_TX_DIRECT \
+	   -DGEM_CONFIG_TX_HEAD_PTR \
+	   -UOS_PUTBACK \
+	   -UCONFIG_PM -DCONFIG_CKSUM_OFFLOAD -DCONFIG_LSO -DCONFIG_POLLING \
+	   -UWA_SHORT_FRAG -UWA_TXINTR
+#
+LDFLAGS += -dy -N misc/mac -N drv/ip

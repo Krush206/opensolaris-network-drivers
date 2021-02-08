@@ -1,0 +1,135 @@
+#
+# Rule for making 32bit binaries
+#
+${BINDIR32}/ni:	${BINDIR32}/ni.o
+	$(LD) -r ${BINDIR32}/ni.o -o $@
+
+${BINDIR32}/pcni:	${BINDIR32}/pcni.o
+	$(LD) -r ${BINDIR32}/pcni.o -o $@
+
+${BINDIR32}/pctos:	${BINDIR32}/pctos.o
+	$(LD) -r ${BINDIR32}/pctos.o -o $@
+
+${BINDIR32}/dp8390:	${BINDIR32}/dp8390.o
+	$(LD) -r ${BINDIR32}/dp8390.o  -o $@
+
+${BINDIR32}/ni.o:	ni.c dp8390reg.h dp8390var.h Makefile.config
+	$(CC) -c ${CFLAGS32} ni.c -o $@
+
+${BINDIR32}/pcni.o:	pcni.c dp8390reg.h dp8390var.h Makefile.config
+	$(CC) -c ${CFLAGS32} pcni.c -o $@
+
+${BINDIR32}/pctos.o:	pctos.c dp8390reg.h dp8390var.h Makefile.config
+	$(CC) -c ${CFLAGS32} pctos.c -o $@
+
+${BINDIR32}/dp8390.o:	dp8390.c dp8390var.h dp8390reg.h Makefile.config
+	$(CC) -c ${CFLAGS32} dp8390.c -o $@
+
+#
+# Rule for making 64bit binaries
+#
+${BINDIR64}/ni:	${BINDIR64}/ni.o
+	$(LD) -r ${BINDIR64}/ni.o -o $@
+
+${BINDIR64}/pcni:	${BINDIR64}/pcni.o
+	$(LD) -r ${BINDIR64}/pcni.o -o $@
+
+${BINDIR64}/pctos:	${BINDIR64}/pctos.o
+	$(LD) -r ${BINDIR64}/pctos.o -o $@
+
+${BINDIR64}/dp8390:	${BINDIR64}/dp8390.o
+	$(LD) -r ${BINDIR64}/dp8390.o -o $@
+
+${BINDIR64}/ni.o:	ni.c dp8390reg.h dp8390var.h Makefile.config
+	$(CC) -c ${CFLAGS64} ni.c -o $@
+
+${BINDIR64}/pcni.o:	pcni.c dp8390reg.h dp8390var.h Makefile.config
+	$(CC) -c ${CFLAGS64} pcni.c -o $@
+
+${BINDIR64}/pctos.o:	pctos.c dp8390reg.h dp8390var.h Makefile.config
+	$(CC) -c ${CFLAGS64} pctos.c -o $@
+
+${BINDIR64}/dp8390.o:	dp8390.c dp8390var.h dp8390reg.h Makefile.config
+	$(CC) -c ${CFLAGS64} dp8390.c -o $@
+
+#
+# For debugging
+#
+ni.i:	ni.c
+	$(CC) -E ${CFLAGS} ni.c -o $@
+
+pcni.i:	pcni.c
+	$(CC) -E ${CFLAGS} pcni.c -o $@
+
+dp8390.i:	dp8390.c
+	$(CC) -E ${CFLAGS} dp8390.c -o $@
+
+#
+# Rule for installation and uninstallation
+#
+install32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/ni
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/pcni
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/dp8390
+
+install64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/ni
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/pcni
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/dp8390
+
+install_pctos32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/pctos
+
+install_pctos64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/pctos
+
+
+/etc/system.noni:	/etc/system
+	cp /etc/system /etc/system.noni
+	echo "exclude: ni" >> /etc/system.noni
+	echo "exclude: pcni" >> /etc/system.noni
+	echo "exclude: pctos" >> /etc/system.noni
+
+uninstall32:
+	${RM} ${INSTALLDIR32}/ni ${INSTALLDIR32}/pcni ${INSTALLDIR32}/dp8390
+
+uninstall64:
+	${RM} ${INSTALLDIR64}/ni ${INSTALLDIR64}/pcni ${INSTALLDIR64}/dp8390
+
+uninstall_pctos32:
+	${RM} ${INSTALLDIR32}/pctos ${INSTALLDIR32}/dp8390
+
+uninstall_pctos64:
+	${RM} ${INSTALLDIR64}/pctos ${INSTALLDIR64}/dp8390
+
+dist:
+	-rm -rf ${DISTDIR}
+	-mkdir  ${DISTDIR}
+	-mkdir  ${DISTDIR}/i386
+	-mkdir  ${DISTDIR}/amd64
+	ln -s i386 ${DISTDIR}/obj
+	/usr/sbin/install -f ${DISTDIR} -m 444 COPYING
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.txt
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.japanese-euc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.macros
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.common
+	ln -s Makefile.i386_gcc ${DISTDIR}/Makefile
+	/usr/sbin/install -f ${DISTDIR} -m 444 ni.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 pcni.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 dp8390.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 dp8390var.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 dp8390reg.h
+	/usr/sbin/install -f ${DISTDIR} -m 755 addni.sh
+	/usr/sbin/install -f ${DISTDIR} -m 755 addpcni.sh
+	cp -r i386 amd64 ${DISTDIR}
+
+clean32:
+	${RM} ${BINDIR32}/*
+
+clean64:
+	${RM} ${BINDIR64}/*

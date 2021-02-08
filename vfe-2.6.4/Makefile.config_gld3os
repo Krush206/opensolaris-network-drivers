@@ -1,0 +1,24 @@
+#
+# Common configuration infomations for all platforms
+#
+DRV	= vfe
+include version
+ONUTSDIR = /home/mrym/opensolaris/usr/src/uts
+PUTBACKDIR = ${ONUTSDIR}/common/io/vfe
+
+DFLAGS	= -DDEBUG -DDEBUG_LEVEL=0 -UGEM_DEBUG_LEVEL -USANITY \
+	  -UTXTIMEOUT_TEST -UTEST_TXDESC_FULL -UTEST_RX_EMPTY \
+	  -UDEBUG_RESUME -UDEBUG_MULTIFRAGS \
+	  -I ${ONUTSDIR}/common
+#
+# Don't enable MAP_MEM for sparc
+#
+CFGFLAGS = -UGEM_CONFIG_POLLING -DGEM_CONFIG_GLDv3 -UGEM_CONFIG_VLAN_HW \
+	   -UGEM_CONFIG_CKSUM_OFFLOAD -DSOLARIS10 \
+	   -Unotdef -UNEVER -UGEM_GCC_RUNTIME \
+	   -UGEM_COMPAT -USANITY -UGEM_CONFIG_FMA -UMODULE \
+	   -UGEM_CONFIG_RX_DIRECT -UGEM_CONFIG_TX_DIRECT \
+	   -UOS_PUTBACK \
+	   -UMAP_MEM -DCONFIG_MAUTO -DWA_SPURIOUS_INTR
+
+LDFLAGS += -dy -N misc/mac -N drv/ip

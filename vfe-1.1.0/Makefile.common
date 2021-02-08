@@ -1,0 +1,84 @@
+#
+# Rule for make 32bit binaries
+#
+${BINDIR32}/vfe:	${BINDIR32}/vfe_gem.o ${BINDIR32}/gem.o
+	$(LD) -r ${BINDIR32}/vfe_gem.o ${BINDIR32}/gem.o -o $@
+
+${BINDIR32}/vfe_gem.o:	vfe_gem.c mii.h rhinereg.h gem.h Makefile.config
+	$(CC) -c ${CFLAGS32} vfe_gem.c -o $@
+
+${BINDIR32}/gem.o:	gem.c mii.h gem.h Makefile.config
+	$(CC) -c ${CFLAGS32} gem.c -o $@
+
+#
+# Rule for make 64bit binaries
+#
+${BINDIR64}/vfe:	${BINDIR64}/vfe_gem.o ${BINDIR64}/gem.o
+	$(LD) -r ${BINDIR64}/vfe_gem.o ${BINDIR64}/gem.o -o $@
+
+${BINDIR64}/vfe_gem.o:	vfe_gem.c mii.h rhinereg.h gem.h Makefile.config
+	$(CC) -c ${CFLAGS64} vfe_gem.c -o $@
+
+${BINDIR64}/gem.o:	gem.c mii.h gem.h Makefile.config
+	$(CC) -c ${CFLAGS64} gem.c -o $@
+#
+# For debugging
+#
+vfe_gem.i:	vfe_gem.c
+	$(CC) -E ${CFLAGS} vfe_gem.c -o $@
+
+#
+# Rule for installation and uninstallation
+#
+install32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/vfe
+
+install64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/vfe
+
+/etc/system.novfe:	/etc/system
+	cp /etc/system /etc/system.novfe
+	echo "exclude: vfe" >> /etc/system.novfe
+
+uninstall32:
+	${RM} ${INSTALLDIR32}/vfe
+
+uninstall64:
+	${RM} ${INSTALLDIR64}/vfe
+
+dist:
+	-rm -rf ${DISTDIR}
+	-mkdir  ${DISTDIR}
+	-mkdir  ${DISTDIR}/i386
+	-mkdir  ${DISTDIR}/amd64
+	-mkdir  ${DISTDIR}/sparc
+	-mkdir  ${DISTDIR}/sparcv9
+	ln -s i386 ${DISTDIR}/obj
+	/usr/sbin/install -f ${DISTDIR} -m 444 COPYING
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.txt
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.japanese-euc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.macros
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.common
+	ln -s Makefile.i386_gcc ${DISTDIR}/Makefile
+	/usr/sbin/install -f ${DISTDIR} -m 444 mii.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 rhinereg.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 vfe_gem.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem.c
+	/usr/sbin/install -f ${DISTDIR} -m 755 adddrv.sh
+	cp -r i386 amd64 sparc sparcv9 ${DISTDIR}
+
+clean32:
+	${RM} ${BINDIR32}/*
+
+clean64:
+	${RM} ${BINDIR64}/*

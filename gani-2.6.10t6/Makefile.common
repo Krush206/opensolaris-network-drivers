@@ -1,0 +1,133 @@
+#
+# Rule for make 32bit binaries
+#
+${BINDIR32}/gani:	${BINDIR32}/gani_gem.o ${BINDIR32}/gem.o
+	$(LD) ${LDFLAGS} -r ${BINDIR32}/gani_gem.o ${BINDIR32}/gem.o -o $@
+
+${BINDIR32}/gani_gem.o:	gani_gem.c gem_mii.h rtl8169reg.h gem.h Makefile.config version
+	$(CC) -c ${CFLAGS32} gani_gem.c -o $@
+
+${BINDIR32}/gem.o:	gem.c gem_mii.h gem.h Makefile.config version
+	$(CC) -c ${CFLAGS32} gem.c -o $@
+
+#
+# Rule for make 64bit binaries
+#
+${BINDIR64}/gani:	${BINDIR64}/gani_gem.o ${BINDIR64}/gem.o
+	$(LD) ${LDFLAGS} -r ${BINDIR64}/gani_gem.o ${BINDIR64}/gem.o -o $@
+
+${BINDIR64}/gani_gem.o:	gani_gem.c gem_mii.h rtl8169reg.h gem.h Makefile.config version
+	$(CC) -c ${CFLAGS64} gani_gem.c -o $@
+
+${BINDIR64}/gem.o:	gem.c gem_mii.h gem.h Makefile.config version
+	$(CC) -c ${CFLAGS64} gem.c -o $@
+#
+# For debugging
+#
+gani_gem.i:	gani_gem.c
+	$(CC) -E ${CFLAGS64} gani_gem.c -o $@
+lint:
+	$(LINT) -E ${CFLAGS64} gani_gem.c
+#
+# Rule for installation and uninstallation
+#
+install32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/gani
+
+install64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/gani
+
+/etc/system.nogani:	/etc/system
+	cp /etc/system /etc/system.nogani
+	echo "exclude: gani" >> /etc/system.nogani
+
+uninstall32:
+	${RM} ${INSTALLDIR32}/gani
+
+uninstall64:
+	${RM} ${INSTALLDIR64}/gani
+
+dist:
+	-rm -rf ${DISTDIR}
+	-mkdir  ${DISTDIR}
+	-mkdir  ${DISTDIR}/i386
+	-mkdir  ${DISTDIR}/amd64
+	-mkdir  ${DISTDIR}/sparc
+	-mkdir  ${DISTDIR}/sparcv9
+	ln -s amd64 ${DISTDIR}/obj
+	/usr/sbin/install -f ${DISTDIR} -m 444 COPYING
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.txt
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.japanese-euc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.macros
+	/usr/sbin/install -f ${DISTDIR} -m 444 version
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld2
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld3
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.common
+	ln -s Makefile.amd64_gcc ${DISTDIR}/Makefile
+	ln -s Makefile.config_gld2 ${DISTDIR}/Makefile.config
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem_mii.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 rtl8169reg.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 gani_gem.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem.c
+	/usr/sbin/install -f ${DISTDIR} -m 755 adddrv.sh
+	cp -r i386 amd64 sparc sparcv9 ${DISTDIR}
+
+clean32:
+	${RM} ${BINDIR32}/*
+
+clean64:
+	${RM} ${BINDIR64}/*
+
+putback: ${PUTBACKDIR}/rtl8169reg.h \
+	${PUTBACKDIR}/gani.c \
+	${PUTBACKDIR}/gani_util.c \
+	${PUTBACKDIR}/gani_util.h \
+	${PUTBACKDIR}/gani_mii.h
+
+${PUTBACKDIR}/gani.c: gani.c
+	unifdef ${CFGFLAGS} gani.c > ${PUTBACKDIR}/gani.c
+	touch -r gani.c  ${PUTBACKDIR}/gani.c
+
+${PUTBACKDIR}/rtl8169reg.h: rtl8169reg.h
+	unifdef ${CFGFLAGS} rtl8169reg.h > ${PUTBACKDIR}/rtl8169reg.h
+	touch -r rtl8169reg.h ${PUTBACKDIR}/rtl8169reg.h
+
+${PUTBACKDIR}/gani_util.h: gani_util.h
+	unifdef ${CFGFLAGS} gem.h > ${PUTBACKDIR}/gani_util.h
+	touch -r gani_util.h ${PUTBACKDIR}/gani_util.h
+
+${PUTBACKDIR}/gani_util.c: gani_util.c
+	unifdef ${CFGFLAGS} gani_util.c > ${PUTBACKDIR}/gani_util.c
+	touch -r gani_util.c ${PUTBACKDIR}/gani_util.c
+
+${PUTBACKDIR}/gani_mii.h: gani_mii.h
+	unifdef ${CFGFLAGS} gani_mii.h > ${PUTBACKDIR}/gani_mii.h
+	touch -r gani_mii.h ${PUTBACKDIR}/gani_mii.h
+
+clean_putback:
+	${RM} ${PUTBACKDIR}/*.[ch]
+
+gani.c: gani_gem.c
+	sed -e "s/gem\.h/gani_util\.h/" -e "s/gem_mii\.h/gani_mii\.h/" -e "s/gem\.c/gani_util\.c/" gani_gem.c > gani.c
+	touch -r gani_gem.c gani.c
+
+gani_util.c: gem.c
+	sed -e "s/gem\.h/gani_util\.h/" -e "s/gem_mii\.h/gani_mii\.h/" -e "s/gem\.c/gani_util\.c/" ../gem2.6/gem.c > gani_util.c
+	touch -r gem.c gani_util.c
+
+gani_util.h: gem.h
+	sed -e "s/GEM_H/VFE_UTIL_H/" -e "s/gem\.h/gani_util\.h/" ../gem2.6/gem.h > gani_util.h
+	touch -r gem.h gani_util.h
+
+gani_mii.h: gem_mii.h
+	sed -e "s/GEM_MII_H/VFE_MII_H/" -e "s/gem_mii/gani_mii/" ../gem2.6/gem_mii.h > gani_mii.h
+	touch -r gem_mii.h gani_mii.h

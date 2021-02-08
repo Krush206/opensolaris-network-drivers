@@ -1,0 +1,23 @@
+#
+# Common configuration infomations for all platforms
+#
+DRV	= epfe
+include version
+ONUTSDIR = /home/mrym/opensolaris/usr-b92/src/uts
+PUTBACKDIR = ${ONUTSDIR}/common/io/sfe
+
+DFLAGS	= -DDEBUG -DDEBUG_LEVEL=0 -UGEM_DEBUG_LEVEL -UTEST_TXDESC_FULL \
+	  -UTEST_RX_EMPTY -UDEBUG_HANG -UTEST_BIGENDIAN -UTEST_FOVW \
+          -I ${ONUTSDIR}/common
+#
+# Caution:
+#
+CFGFLAGS = -DGEM_CONFIG_POLLING -DGEM_CONFIG_GLDv3 -DGEM_CONFIG_VLAN_HW \
+	   -UGEM_CONFIG_CKSUM_OFFLOAD -DSOLARIS10 \
+	   -Unotdef -UNEVER -UGEM_GCC_RUNTIME \
+	   -UGEM_COMPAT -USANITY -UGEM_CONFIG_FMA -UMODULE \
+	   -UGEM_CONFIG_RX_DIRECT -DGEM_CONFIG_TX_DIRECT \
+	   -UOS_PUTBACK \
+	   -DMAP_MEM
+
+LDFLAGS += -dy -N misc/mac -N drv/ip

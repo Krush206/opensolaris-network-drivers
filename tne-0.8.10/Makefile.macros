@@ -1,0 +1,25 @@
+#
+# Common macros for version
+#
+VFLAGS			= -DVERSION='"${VERSION}"'
+
+#
+# Common macros for GCC
+#
+OFLAGS_GCC		= -O2 -fno-inline
+KFLAGS_GCC		= -ffreestanding -U_NO_LONGLONG -D_KERNEL
+AFLAGS_GCC_I386		= -Di86pc
+AFLAGS_GCC_AMD64	= -m64 -mtune=opteron -Di86pc \
+			  -mcmodel=kernel -mno-red-zone -fno-strict-aliasing
+AFLAGS_GCC_SPARC	= -Dsun4u
+AFLAGS_GCC_SPARCV9	= -mcpu=v9 -m64 -Dsun4u
+
+#
+# Common macros for Sun C compiler
+#
+OFLAGS_SUNCC		= -O
+KFLAGS_SUNCC		= -U_NO_LONGLONG -D_KERNEL
+AFLAGS_SUNCC_I386	= -Di86pc
+AFLAGS_SUNCC_AMD64	= -xarch=amd64 -Di86pc -Wu,-xmodel=kernel
+AFLAGS_SUNCC_SPARC	= -Dsun4u
+AFLAGS_SUNCC_SPARCV9	= -xarch=v9 -Dsun4u

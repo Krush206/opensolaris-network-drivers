@@ -1,0 +1,1061 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+  <title>nForce Linux Driver Release Notes</title>
+  <meta name="description" content="nForce Linux Driver Release Notes">
+  <meta name="keywords" content="ReleaseNotes">
+  <meta name="resource-type" content="document">
+  <meta name="distribution" content="global">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<h1 align="center"><strong>NVIDIA nForce Linux Drivers</strong></h1>
+<p> </p>
+<h1><a name="SECTION00010000000000000000"> Contents</a> </h1>
+<p> </p>
+<ol>
+  <li><a href="#SECTION00010000000000000000">These Contents</a> </li>
+  <li><a href="#SECTION00020000000000000000">Overview</a> </li>
+  <li><a href="#SECTION00030000000000000000">Package Availability</a> </li>
+  <li><a href="#SECTION00040000000000000000">Minimum Requirements</a> </li>
+  <li><a href="#SECTION00050000000000000000">Licensing</a> </li>
+  <li><a href="#SECTION00060000000000000000">What The Installer Contains</a> </li>
+  <li><a href="#SECTION00070000000000000000">What The Installer Does</a> </li>
+  <li><a href="#SECTION00080000000000000000">Installation</a></li>
+  <li><a href="#Configuration">Configuration</a></li>
+  <li><a href="#Loading_the_drivers">Loading The Drivers</a><br>
+  </li>
+  <li><a href="#module_parameters">Module Parameters&nbsp;</a></li>
+  <li><a href="#nvpanel">Audio Control Panel</a><br>
+  </li>
+  <li><a href="#Troubleshooting">Troubleshooting</a> </li>
+  <li><a href="#FAQ">Frequently Asked Questions (FAQ)</a></li>
+  <li><a href="#Acknowledgements">Acknowledgments</a><br>
+  </li>
+  <li><a href="#SECTION000120000000000000000">Change List</a></li>
+</ol>
+<p> </p>
+<h1><a name="SECTION00020000000000000000"> Overview</a> </h1>
+<p> The nForce chipset contains a number of hardware devices that can be
+run under Linux; a network device (MAC), audio hardware, storage
+controllers (IDE and SATA), and OHCI/EHCI USB controllers. Many of the
+components of the nForce chipset use industry standard interfaces; thus,
+not all components require custom drivers to be used on Linux. </p>
+<p> Bug reports and installation questions may be directed to: </p>
+<p> <a href="mailto:linux-nforce-bugs@nvidia.com"><i>linux-nforce-bugs@nvidia.com</i></a> </p>
+<p>Before submitting a bug report, please read the <a
+ href="#Troubleshooting">Troubleshooting</a> and <a href="#FAQ">FAQ</a>
+sections first, and review the Known Problems list for the driver
+version you are using. This can be found at NVIDIA's web site, on the
+release page for the driver version.<br>
+</p>
+<p>If you decide to submit a bug report, make sure to run nforce-bug-report.sh,
+which will create the file nforce-bug-report.log in the current directory,
+and include this log file with the bug report. (The nforce-bug-report.sh
+script is normally installed in /usr/bin/ when you run the driver
+installer.)<br>
+<br>
+</p>
+<p> </p>
+<h1><a name="SECTION00030000000000000000"> Package Availability</a> </h1>
+<p> This package can be found at the NVIDIA web site: </p>
+<p> </p>
+<pre><a href="http://www.nvidia.com/content/drivers/drivers.asp">http://www.nvidia.com/content/drivers/drivers.asp</a><br></pre>
+<p> We strongly urge you to only use software obtained from this website
+or a trusted Linux distribution for your nForce hardware. </p>
+<p> </p>
+<h1><a name="SECTION00040000000000000000"> Minimum Requirements</a> </h1>
+<p> At the current time, the nForce drivers require a 2.4 or 2.6 series
+kernel running on 32- or 64-bit AMD CPUs.<br>
+<br>
+NVIDIA's audio driver is an OSS driver, and requires OSS sound support
+in the kernel. NVIDIA's audio control panel is a Qt-based application,
+and requires Qt run-time libraries in order to run.</p>
+<p> </p>
+<h1><a name="SECTION00050000000000000000"> Licensing</a> </h1>
+<p> The network and audio driver provided by NVIDIA is subject to the
+NVIDIA software license; the license is available on the NVIDIA website,
+and is included in this package. By using this software, you are
+agreeing to the terms of the license. </p>
+<p> </p>
+<h1><a name="SECTION00060000000000000000"> What the Installer Contains</a> </h1>
+<p> The package contains the following items: </p>
+<ol>
+  <li>This Installation Guide </li>
+  <li>The NVIDIA license for the network driver software </li>
+  <li>Pre-built kernel library for the nForce audio driver</li>
+  <li>Pre-built kernel library for the nForce network driver</li>
+  <li>Audio control panel binary<br>
+  </li>
+  <li>Pre-built kernel interface binaries for major distributions</li>
+  <li>Source for the kernel interface portion of the audio driver</li>
+  <li>Source for the kernel interface portion of the network driver<br>
+  </li>
+</ol>
+<h1><a name="SECTION00070000000000000000">What the Installer Does</a> </h1>
+<p> This installer will prepare a network driver and an audio driver,
+then place them in the appropriate locations for loadable kernel
+modules.&nbsp; The network and audio drivers are from NVIDIA.&nbsp; If
+the audio driver is installed, the installer will also install the audio
+control panel application.<br>
+</p>
+<h1><a name="SECTION00080000000000000000">Installation</a> </h1>
+<p> Nvidia has provided a self-extracting installer that will prepare
+the drivers and install them into the appropriate location for your
+kernel's module tree.&nbsp; Note that there is a 32-bit installer as
+well as a 64-bit installer.&nbsp; The 64-bit installer is required for
+x86_64 kernels.&nbsp; You can check what kind of machine you are
+currently running on by checking the output of <code>uname -m</code>.
+If the output reports <code>x86_64</code>, you are running a 64-bit
+kernel and should use the 64-bit installer.</p>
+<p>To install the drivers, simply run the installer binary under a
+shell with root privileges, and follow the onscreen instructions.<br>
+</p>
+<p>The .run file accepts many command line options.&nbsp; Here are a
+few of the more common options:<br>
+</p>
+<p style="margin-left: 40px;">--info<br>
+Print embedded info about the .run file and exit.<br>
+</p>
+<p style="margin-left: 40px;">--check<br>
+Check integrity of the archive and exit.<br>
+</p>
+<p style="margin-left: 40px;">--extract-only<br>
+Extract the contents of the .run file, but do not run
+'nforce-installer'.<br>
+</p>
+<p style="margin-left: 40px;">--help<br>
+Print usage information for the common command line options and exit.<br>
+</p>
+<p style="margin-left: 40px;">--advanced-options<br>
+Print usage information for the common command line options as well as
+the advanced options, and exit.<br>
+</p>
+<p>The installer will use an ncurses-based user interface if it can
+find the correct ncurses library.&nbsp; Otherwise, it will fall back to
+a simple interactive text interface.&nbsp; To disable use of the ncurses
+user interface, use the option '--ui=none'.<br>
+</p>
+<p>The installer contains pre-built drivers for major Linux
+distributions.&nbsp; In the event that the installer cannot find a
+pre-built driver for your kernel, the installer will attempt to build
+the driver.&nbsp; In this case, it is necessary to install the kernel
+source corresponding to the kernel for which the driver will be
+installed for.<br>
+</p>
+<p> You might want to check the BIOS configuration on your system to
+ensure that the audio and networking devices will be detected. See the
+System BIOS Configuration description in the Troubleshooting section.<br>
+</p>
+<p><span style="font-weight: bold;">NOTE that for network driver
+updates, you must first deactivate the NVIDIA network device prior to
+running the installer. Otherwise the module count for that device will
+not be zero and installation of network driver will fail.</span><br>
+</p>
+<h1><a name="Configuration"></a>Configuration<br>
+</h1>
+<p>The installer does not update configuration files.&nbsp; After
+installing the drivers, configure the system to use the drivers by using
+the distribution's built-in configuration mechanisms for networking and
+sound, or edit the required files manually.</p>
+<h2><a name="Module_configuration_file_location"></a>Module
+Configuration File Location</h2>
+<p style="color: rgb(0, 0, 0);"> Module configuration files are
+different for 2.4 and 2.6 series kernels. The various Linux
+distributions also differ in how they handle module configuration.</p>
+<ul>
+  <li>For distributions based on a 2.4 series kernel, the module
+configuration file is typically called <code>/etc/modules.conf.<br>
+    </code><br>
+  </li>
+  <li>For distributions based on a 2.6 series kernel, the module
+configuration file is typically called <code>/etc/modprobe.conf</code>.
+Some distributions use a subdirectory, <code>/etc/modprobe.d/</code> ,
+to hold individual configuration files for sound modules, etc.&nbsp; </li>
+</ul>
+<h2>Configuring the network driver</h2>
+<h3>SuSE</h3>
+For <span style="font-style: italic;">SuSE Linux Enterprise Server 9</span>,
+use YaST to configure the network driver. YaST may be started in text mode by
+using the command "yast", or in graphical mode by using the command "yast2".
+Within the YaST UI, select "Network Devices", then select "Network Card". This
+should bring up the "Network cards configuration" dialog.<br>
+<br>
+Select "Other (not detected)", then select the "Configure" button. In
+the "Kernel Module" section, set "Module Name" to "nvnet", then select
+the "Next" button. Configure the interface parameters as required,
+select the "Next" button to return to the card configuration dialog, and
+select "Finish".<br>
+
+<h3>Red Hat</h3>
+For <span style="font-style: italic;">Red Hat Enterprise Linux version
+3</span>,&nbsp; <span style="font-style: italic;">Red Hat 8, Red Hat 9</span>
+and <span style="font-style: italic;">Fedora Core 1</span>, follow the
+instructions in <a href="#Network_Other_distributions">other
+distributions</a> to edit the configuration file <code>/etc/modules.conf</code>.
+For <span style="font-style: italic;">Red Hat Enterprise Linux version
+4</span>, <span style="font-style: italic;">Fedora Core 2</span> and later,
+follow the instructions in <a href="#Network_Other_distributions">other
+distributions</a> to edit the configuration file
+<code>/etc/modprobe.conf</code>.
+<br>
+<br>
+Once the configuration file has been edited, configure the network interface
+parameters using the Network Configuration tool on the System Settings menu.
+The configuration tool can also be launched directly as "neat". (To launch
+neat in text mode, use "neat-tui".)<br>
+
+<h3>Mandrake / Mandriva</h3>
+For <span style="font-style: italic;">Mandrake 10</span><span
+ style="font-style: italic;"></span>, use Mandrake Control Center
+(available via the <code>mcc</code> command) to configure the network
+driver. Select "Network &amp; Internet", then select "New Connection".
+Select "LAN &nbsp;Connection", select &nbsp;"Next", then select "Manual
+Choice". &nbsp;From the list of available network drivers, select
+"nvnet", then select "Next". and select "autoprobe". At this point, the
+driver will be configured and a new interface made availabe; select the
+newly-added interface to configure IP address settings, etc.<br>
+<br>
+For earlier Mandrake distributions,  follow the instructions in <a
+ href="#Network_Other_distributions">other distributions</a> to edit the
+configuration file <code>/etc/modules.conf</code>. Once this is done,
+Mandrake Control Center can be used to configure IP address settings,
+etc., on the network interface supported by nvnet.<br>
+<br>
+<h3><a name="Network_Other_distributions"></a>Other distributions</h3>
+If the distribution you are using provides a configuration mechanism
+for network drivers, use it to select the nvnet driver module for use
+with the nForce ethernet device, and to set the networking parameters
+(IP address, etc.) for the interface. Otherwise, manually edit the
+module configuration file.<br>
+<br>
+If your configuration file already contains an entry for the forcedeth
+driver (an open-source network driver that supports the nForce network
+controller), that entry needs to be commented out with a <code>#</code>
+or removed:<br>
+<br>
+<code># alias eth0 forcedeth </code><br>
+<p>
+Add the following lines to the configuration file:<br>
+<br>
+<code>
+alias eth0 nvnet<br>
+alias forcedeth off
+</code><br style="color: rgb(255, 0, 0);">
+<br style="color: rgb(255, 0, 0);">
+If your system has multiple ethernet interfaces, you may need to use
+'eth1' &nbsp;or higher in place of 'eth0'.<br
+ style="color: rgb(255, 0, 0);">
+<br style="color: rgb(255, 0, 0);">
+<h2>Configuring the audio driver</h2>
+<h3>SuSE</h3>
+For <span style="font-style: italic;">SuSE Linux Enterprise Server 9</span>,
+&nbsp;at the time of writing it isn't possible to use YaST to configure
+the nvsound audio driver. Following the instructions in <a
+ href="#Audio_Other_distributions">other distributions</a> to edit the
+configuration file <code>/etc/modprobe.d/sound</code>.<br>
+<h3>Red Hat</h3>
+For <span style="font-style: italic;">Red Hat Enterprise Linux version
+3</span>,&nbsp; <span style="font-style: italic;">Red Hat 8, Red Hat 9</span>
+and <span style="font-style: italic;">Fedora Core 1</span>, follow the
+instructions in <a href="#Audio_Other_distributions">other distributions</a>
+to edit the configuration file <code>/etc/modules.conf</code>.<br>
+<br>
+For <span style="font-style: italic;">Fedora Core 2</span> and later,  follow
+the instructions in <a href="#Audio_Other_distributions">other
+distributions</a> to edit the configuration file <code>/etc/modprobe.conf</code>.
+<h3>Mandrake / Mandriva</h3>
+At the time of writing, it isn't possible to use Mandrake Control
+Center to configure the nvsound audio driver. <br>
+<br>
+Follow the instructions in <a href="#Audio_Other_distributions">other
+distributions</a> to manually edit the configuration file. For <span
+ style="font-style: italic;">Mandrake 10</span> or other Mandrake
+distributions running 2.6 kernels, the configuration file is&nbsp; <code>/etc/modprobe.conf</code>.
+For earlier distributions that run 2.4 kernels, the configuration file
+is<code> /etc/modules.conf</code>.
+<h3><a name="Audio_Other_distributions"></a>Other distributions</h3>
+If the distribution you are using provides a configuration mechanism
+for audio drivers, use it to select the nvsound driver module for use
+with the nForce audio device. Otherwise, manually edit the module
+configuration file.<br>
+<br>
+If your configuration file already contains an entry for the
+i810_audio or snd-intel8x0 drivers (open-source audio drivers
+that supports the nForce audio controller), that entry needs to be
+commented out with a <code>#</code> or removed:<br>
+<br>
+<code># alias sound-slot-0 i810_audio</code><br>
+<br>
+Add the following lines to the configuration file:<br>
+<br>
+<code>alias sound-slot-0 nvsound<br>
+alias snd-intel8x0 off<br>
+alias i810_audio off
+</code><br>
+<br>
+On some distributions, you may need to replace <code>sound-slot-0</code>
+with <code>snd-card-0</code>.<br>
+<br>
+If you wish to have nvmixer audio settings automatically restored each time the
+nvsound driver loads, add the following lines to the configuration file for 2.4 kernels:<br>
+<br>
+<code>post-install nvsound sleep 1; /usr/bin/nvmix-reg -f /etc/nvmixrc -L >/dev/null 2>&1 ||:</code><br>
+<code>pre-remove nvsound /usr/bin/nvmix-reg -f /etc/nvmixrc -S >/dev/null 2>&1 ||:</code><br>
+<br>
+For 2.6 kernels:<br>
+<br>
+<code>install nvsound /sbin/modprobe --ignore-install nvsound ; sleep 1; /usr/bin/nvmix-reg -f /etc/nvmixrc -L >/dev/null 2>&1 || :</code><br>
+<code>remove nvsound { /usr/bin/nvmix-reg -f /etc/nvmixrc -S >/dev/null 2>&1 || : ; }; /sbin/modprobe -r --ignore-remove nvsound</code><br>
+<br>
+For both 2.4 and 2.6 kernels, you should add the following code to
+<code>/etc/rc.d/init.d/halt</code>, or
+<code>/etc/init.d/halt.local</code> on SuSE distributions. On Mandriva
+distributions, add the code at the end of function <code>stop_mixer()</code>
+in <code>/etc/rc.d/init.d/sound</code>.
+<br>
+<br>
+<code>if grep -q "\(nvsound\)" /proc/modules && [ -x /usr/bin/nvmix-reg ]; then</code><br>
+<code>/usr/bin/nvmix-reg -f /etc/nvmixrc -S >/dev/null 2>&1 </code><br>
+<code>fi</code>
+<p>
+(In <code>/etc/rc.d/init.d/halt</code>, this code is best located next to
+any existing code that saves ALSA mixer settings.)
+<p>
+For <span style="font-style:italic">Red Hat Enterprise Linux 4</span>,
+<span style="font-style:italic">Fedora Core 3</span> and later, add the
+following line in <code>/etc/rc.local</code>:<br>
+<br>
+<code>/usr/bin/nvmix-reg -f /etc/nvmixrc -L >/dev/null 2>&1 </code><br>
+<br>
+
+<br>
+<h1><a name="Loading_the_drivers"></a>Loading The Drivers<br
+ style="color: rgb(255, 0, 0);">
+</h1>
+<p>The installer may or may not leave the new modules loaded after the
+installation, depending on the existing configuration. You can force the
+module to be loaded using <i>insmod</i> or <i>modprobe</i> :<br>
+</p>
+<p><code>insmod &lt;modulename&gt;</code><br>
+</p>
+<p>or<br>
+<br>
+<code>modprobe &lt;modulename&gt;<br>
+</code><code></code></p>
+<p>On subsequent reboots, the modules should load automatically.<br>
+</p>
+<p> </p>
+<p> </p>
+<p> </p>
+<h1><a name="module_parameters"></a>Module Parameters</h1>
+The run-time behavior of NVIDIA drivers may be configured by use of
+module parameters. These&nbsp; can be specified either on the command
+line when loading the module, or in the <a
+ href="#Module_configuration_file_location">module configuration file</a>
+(such as /etc/modules.conf). For example, to have the nForce ethernet
+driver use CPU optimized mode, add the following to the module
+configuration file:<br>
+<code><br>
+options nvnet optimization=1<br>
+<br>
+</code> Or if loading the module manually from the command line:<br>
+<br>
+<code>modprobe nvnet optimization=1</code><br>
+<br>
+The module parameters for the ethernet driver can be verified using the
+command:<br>
+<br>
+<code>modinfo -p nvnet</code><br>
+<br>
+The following sections contain descriptions of all driver module
+parameters.<br>
+<h2><a name="nvnet_Module_Parameters"></a>nvnet Module Parameters<br>
+</h2>
+The nForce network driver supports the following optional parameters:<br>
+<ol>
+  <li>hardware offload mode</li>
+  <li>optimization</li>
+  <li>negotiation mode<br>
+  </li>
+  <li>speed and duplex</li>
+  <li>media<br>
+  </li>
+  <li>max TX packets</li>
+  <li>max RX packets</li>
+  <li>MTU</li>
+  <li>poll interval<br>
+  </li>
+  <li>segmentation offload</li>
+  <li>TX checksum offload</li>
+  <li>RX checksum offload<br>
+  </li>
+</ol>
+<h3>Hardware Offload Mode</h3>
+This parameter controls the hardware mode.&nbsp; The nForce
+network driver supports two hardware modes:<br>
+<ul>
+  <li>hwmode=1 - off</li>
+  <li>hwmode=2 - on</li>
+</ul>
+In hardware mode 2, TX checksum offload, RX checksum offload, segmentation offload, 
+and RGMII (Reduced Gigabit Media Independent Interface) are used, and the MTU size 
+can be set with the "mtu" driver parameter. &nbsp; In hardware mode 1, these offload modes 
+are turned off, MII (Media Independent Interface) is used, and the "mtu" driver 
+parameter is ignored.<br>
+<br>
+The default hardware mode will depend on the network
+controller.<br>
+<h3>Optimization<br>
+</h3>
+The nForce network driver's optimization mode can be specified with the module parameter 
+"optimization". &nbsp; The driver supports two optimization modes:<br>
+<ul>
+  <li>optimization=0 - Network throughput optimization</li>
+  <li>optimization=1 - CPU load optimization</li>
+</ul>
+
+CPU-load optimization mode reduces the CPU utilization by reducing the frequency of 
+interrupts. <br>
+<br>
+
+Network-throughput optimization mode maximizes the network throughput at the expense 
+of higher CPU consumption. <br>
+<br>
+
+By default, the driver runs in network-throughput optimization mode.<br>
+
+<h3>Negotiation Mode</h3>
+The nForce network driver supports two negotiation modes:<br>
+<ul>
+  <li>autonegotiate=0 - disabled</li>
+  <li>autonegotiate=1 - enabled</li>
+</ul>
+When negotiation mode is enabled, the controller will negotiate for the
+speed and duplexspecified with the "force_speed_duplex" parameter.&nbsp; If negotiation mode is disabled, the
+controller will not negotiate, but will force the speed and duplex specified with "force_speed_duplex".<br>
+<br>
+By default, autonegotiate is enabled.<br>
+<h3>Speed and Duplex<br>
+</h3>
+The "force_speed_duplex" module parameter can be used set the interface
+speed and duplex of the ethernet controller.&nbsp; The following values
+are supported:<br>
+<ul>
+  <li>force_speed_duplex=0 - autonegotiate</li>
+  <li>force_speed_duplex=1 - 10Mbps half duplex<br>
+  </li>
+  <li>force_speed_duplex=2 - 10Mbps full duplex</li>
+  <li>force_speed_duplex=3 - 100Mbps half duplex</li>
+  <li>force_speed_duplex=4 - 100Mbps full duplex</li>
+  <li>force_speed_duplex=5 - autonegotiate for 10Mbps half duplex</li>
+  <li>force_speed_duplex=6 - autonegotiate for 10Mbps full duplex</li>
+  <li>force_speed_duplex=7 - autonegotiate for 100Mbps half duplex</li>
+  <li>force_speed_duplex=8 - autonegotiate for 100Mbps full duplex</li>
+  <li>force_speed_duplex=9 - autonegotiate for 1000Mbps full duplex</li>
+</ul>
+If a value of 0 (autonegotiate) is used, the controller will negotiate for the optimum speed and duplex. <br><br>
+
+If a value between 1 and 4, inclusive, is set for this parameter, then negotiation behavior will depend on the value of the "auto_negotiate" module parameter. If "auto_negotiate" is enabled, the controller will negotiate for the speed and duplex specified in "force_speed_duplex". If "auto_negotiate" is disabled, the controller will be set to the speed and duplex specified, without negotiation. <br><br>
+
+If a value between 5 and 9, inclusive, is set for this parameter, then the controller will always negotiate for the speed and duplex specified. In this case, the "auto_negotiate" module parameter is ignored. <br><br>
+
+By default, the controller will autonegotiate for the optimum speed and duplex.<br>
+<h3>Media</h3>
+
+The default value of this parameter depends on whether the driver is using hardware mode 1 or 2. If hardware mode 2 is being used, RGMII is the default. If hardware mode 1 is being used, MII is the default." 
+
+
+The "media" module parameter can be used to specify the media interface.&nbsp; 
+This module parameter supports the following values:<br>
+<ul>
+  <li>media=0 - auto</li>
+  <li>media=1 - RGMII</li>
+  <li>media=2 - MII<br>
+  </li>
+</ul>
+The default value of this parameter depends on whether the driver is using hardware mode 1 
+or 2. &nbsp; If hardware mode 2 is being used, RGMII is the default. &nbsp; If hardware mode 1 is being 
+used, MII is the default.<br>
+<h3>Max TX packets<br>
+</h3>
+The "max_tx_packets" module parameter controls the maximum number of
+queued TX (transmit) packets.&nbsp; This parameter takes a value
+between 32 and 1024, inclusive.&nbsp; By default, 64 maximum TX packets
+will be used.<br>
+<h3>Max RX packets<br>
+</h3>
+The "max_rx_packets" module parameter controls the maximum number of
+queued RX (receive) packets.&nbsp; This parameter takes a value
+between 32 and 1024, inclusive.&nbsp; By default, 64 maximum RX packets
+will be used.<br>
+<h3>MTU</h3>
+The "mtu" module parameter controls the MTU size in bytes.&nbsp; This
+parameter takes a value between 576 and 9202, inclusive.&nbsp; By
+default, a 1500 byte MTU is used.&nbsp; This parameter is only relevant
+when hardware offload mode is turned on.<br>
+<h3>Poll Interval</h3>
+The "poll_interval_in_us" module parameter is used to control the rate
+at which hardware interrupts are generated, and is only relevant when running
+in CPU optimization mode.&nbsp; This parameter is ignored in throughput
+optimization mode.&nbsp; This parameter takes a microsecond value
+between 0 and 2000.<br>
+<h3>Segmentation Offload</h3>
+This feature allows the hardware to divide a single buffer (whose length is greater then the TCP segment size)
+into multple TCP segments. &nbsp;
+The nForce network driver supports two modes for segmentation offload:<br>
+<ul>
+  <li>seg_offload=0 - disabled</li>
+  <li>seg_offload=1 - enabled</li>
+</ul>
+In hwmode 1, the "seg_offload" module parameter defaults to
+0 (disabled).&nbsp; In hwmode 2, the "seg_offload" module
+parameter defaults to 1 (enabled).<br>
+<h3>TX checksum Offload</h3>
+Checksum offloads perform the TCP/IP checksum calculation in hardware to reduce CPU. &nbsp;
+The nForce network driver supports two modes for TX checksum offload:<br>
+<ul>
+  <li>tx_checksum_offload=0 - disabled</li>
+  <li>tx_checksum_offload=1 - enabled</li>
+</ul>
+In hwmode 1, the "tx_checksum_offload" module parameter
+defaults to 0 (disabled).&nbsp; In hwmode 2, the
+"tx_checksum_offload" module parameter defaults to 1 (enabled).<br>
+<h3>RX checksum Offload</h3>
+Checksum offloads perform the TCP/IP checksum calculation in hardware to reduce CPU. &nbsp;
+The nForce network driver supports two modes for RX checksum offload:<br>
+<ul>
+  <li>rx_checksum_offload=0 - disabled</li>
+  <li>rx_checksum_offload=1 - enabled</li>
+</ul>
+In hwmode 1, the "rx_checksum_offload" module parameter
+defaults to 0 (disabled).&nbsp; In hwmode 2, the
+"rx_checksum_offload" module parameter defaults to 1 (enabled).<br>
+<br>
+<h2><a name="nvaudio_Module_Parameters"></a>nvsound Module Parameters<br>
+</h2>
+There are currently no nvsound module parameters.<br>
+<br>
+<br>
+<h1><a name="nvpanel"></a>Audio Control Panel</h1>
+A control panel application, nvmixer,&nbsp; is included with the audio
+driver to control the features of the nForce audio driver.&nbsp; These
+features include:
+<ul>
+  <li>Speaker setup</li>
+  <li>Master volume control</li>
+  <li>Per channel volume control / mute<br>
+  <li>Input source selection</li>
+</ul>
+<h2>Usage</h2>
+On installation nvmixer is getting copied to /usr/bin. This application need X for running.
+<br>
+The audio control panel may be invoked by typing "nvmixer" at the
+command line:
+<pre>example% nvmixer<br></pre>
+For those that are migrating from an existing NVIDIA audio driver, note
+that the old "nvaudio" control panel will not work with the new audio
+driver.<br>
+<br>
+<h2><a name="System_Requirements"></a>System Requirements</h2>
+The nvmixer application uses the Qt graphical user interface toolkit.
+The pre-built nvmixer shipped with this release is built using Qt
+version 3.1, and requires Qt 3.1 or later run-time libraries to be present on
+your system in order to run.<br>
+<br>
+If your system does not have Qt 3.1 or later libraries installed, you will most
+likely receive an "relocation error: ... undefined symbol" error message
+when you try to run nvmixer. If this occurs, there are two ways to solve
+this problem:
+<ul>
+  <li>Download and install Qt 3.1 or later libraries for your Linux
+distribution, so that the pre-built nvmixer application works correctly.<br>
+    <br>
+  </li>
+  <li>Download the source code for nvmixer from NVIDIA and build it
+using a Qt version that is readily available for your Linux distribution
+(3.1 or later is required). The nvmixer source code package is available
+for download via anonymous FTP at:<br>
+    <pre><a href="ftp://download.nvidia.com/linux/nforce/nvmixer/nvmixer.tgz"><br>ftp://download.nvidia.com/linux/nforce/nvmixer/nvmixer.tgz</a><br></pre>
+Pre-requisites and instructions for building nvmixer are included in
+the source code package.<br>
+  </li>
+</ul>
+<h1><a name="Troubleshooting">Troubleshooting</a></h1>
+<p>This section covers problems that commonly occur when installing
+nForce drivers on Linux. If you encounter problems, please read this
+section and the <a href="#FAQ">FAQ</a> , and review the Known Problems
+list for the driver version you are using. This can be found at NVIDIA's
+web site, on the release page for the driver version.<br>
+</p>
+<p>If you decide to submit a bug report, make sure to include
+nforce-bug-report.log in the bug report by running nforce-bug-report.sh.<br>
+</p>
+<p> Bug reports and installation questions may be directed to: </p>
+<p style="color: rgb(255, 0, 0);"> <a
+ href="mailto:linux-nforce-bugs@nvidia.com"><i>linux-nforce-bugs@nvidia.com</i></a> </p>
+<p> </p>
+<h2><a name="SECTION000101000000000000000">System BIOS Configuration</a> </h2>
+<p> Since the audio and network drivers work on the nForce chipset,
+these devices along with other motherboard devices are controlled by the
+System BIOS. If the installed drivers don't recognize hardware on your
+system, the problem may be your System BIOS's plug and play
+configuration. If your audio or network devices are disabled in the
+BIOS, or the system BIOS expects the operating system to configure
+hardware devices, and your Linux kernel doesn't support ACPI-style
+configuration, you'll need to change your BIOS settings. </p>
+
+<p><b>Warning</b>: You should make a note of the original BIOS configuration
+settings before changing them. Changing your system BIOS configuration may
+adversely affect the operation of the system, and even make it
+unbootable.<br>
+
+
+<p> To view or change an Award-style system BIOS, reboot the machine,
+and press the Delete key. When you get a configuration screen, select
+"PnP/PCI Configurations" in that screen if "PNP OS Installed []" Has
+"Yes" chosen, change the selection to "No". </p>
+<p> If your BIOS is Phoenix-style, use the F2 key instead of Delete, and
+scroll through the menus to find OS Type, and chose "Other". The exact
+details of System BIOS configuration vary with BIOS vendor, so the
+screens may not be exactly the same. </p>
+
+
+</p>
+<h2><a name="SECTION000101000000000000000"> Installer</a></h2>
+<ul>
+  <li><i>Q: When I try to build, I get a message telling me that I
+should never try to use system headers. What's wrong?</i>
+    <p> A: You need to install the sources for your kernel. Please
+download and install the appropriate kernel-source package for your
+kernel<br>
+    </p>
+  </li>
+  <li>
+    <p><i>Q: How do I tell if I have my kernel sources installed?</i> </p>
+    <p> A: If you're running on a distro that uses RPM (Red Hat,
+Mandrake, SuSE, etc), then you can use RPM to tell you. At a shell
+prompt, type: </p>
+    <p> </p>
+    <pre>example% rpm -qa | grep kernel<br></pre>
+    <p> and look at the output. You should see a package that
+corresponds to your kernel (often named something like kernel-2.4.18-3)
+and a kernel source package with the same version (often named something
+like kernel-source-2.4.18-3). If none of the lines seem to correspond to
+a source package, then you'll probably need to install it. If the
+versions listed mismatch (ex: kernel-2.4.18-10 vs.
+kernel-source-2.4.18-3), then you'll need to update the kernel-source
+package to match the installed kernel. If you have multiple kernels
+installed, you need to install the kernel-source package that
+corresponds to your <i>running</i> kernel (or make sure your installed
+source package matches the running kernel). You can do this by looking
+at the output of "uname -r" and matching versions. </p>
+  </li>
+  <li><span style="font-style: italic;">Q: I just upgraded my kernel,
+and now the NVIDIA kernel module will not load.&nbsp; What is wrong?</span><br>
+    <br>
+A: The kernel interface layer of the NVIDIA kernel module must be
+compiled specifically for the configuration and version of your
+kernel.&nbsp; If you upgrade your kernel, then the simplest solution is
+to reinstall the driver.<br>
+    <br>
+ADVANCED: You can install the NVIDIA kernel module for a non running
+kernel (for example: in the situation where you just built and installed
+a new kernel, but have not rebooted yet) with the command line option
+--kernel-name='KERNEL_NAME', where KERNEL_NAME is what 'uname -r' would
+report if the target kernel were running.<br>
+    <br>
+  </li>
+  <li><span style="font-style: italic;">Q: nforce-installer does not
+work on my computer.&nbsp; How can I install the driver contained within
+the .run file?</span><br>
+    <br>
+A: To install the NVIDIA driver contained within the .run file without
+using nforce-installer, you can use the included makefile that is
+extracted with the --extract-only command-line option.&nbsp; The
+makefile for the audio driver is in the nvsound/main directory of the
+extracted .run file, and the makefile for the network driver is in the
+nvnet directory of the extracted .run file. This method of installation is not
+recommended if nforce-installer works properly on your system; it is intended
+as a last resort in the event the installer won't function.
+<p>
+  </li>
+  <li>Q: <span style="font-style: italic;">I have multiple kernels
+installed. When I run the NVIDIA installer under one kernel, it removes
+modules I previously installed for one of the other kernels. How do I
+prevent the installer doing that?</span><br
+ style="color: rgb(255, 0, 0); font-style: italic;">
+    <br style="color: rgb(255, 0, 0);">
+A: You can avoid this by using the --kernel-module-only option to the
+installer when you install for the second and subsequent kernels in your
+installation. This advanced option installs the kernel module only (no
+documentation, etc.) and does not remove any previously installed driver
+module. <br>
+    <br>
+  </li>
+</ul>
+<h2><a name="SECTION000101000000000000000"> Audio driver</a><br>
+</h2>
+<ul>
+  <li><span style="font-style: italic;">Q: I've installed the nvsound
+driver and edited the module configuration files, but the Intel 810 sound
+driver still gets loaded.</span>
+    <p> A: Try adding the following lines to the system's module configuration file:<p>
+<code>alias snd-intel8x0 off<br>
+alias i810_audio off
+</code><br>
+  </li>
+
+  <li><span style="font-style: italic;">Q: I've installed the nvsound
+driver, but xmms doesn't produce any audio output when I try to play
+sound files.</span>
+    <p> A: Check that xmms is configured to use the OSS output plugin
+(nvsound is an OSS driver). The xmms output plugin settings can be
+viewed on xmms's Options-&gt;Preferences submenu.</p>
+  </li>
+  <li><span style="font-style: italic;">Q: When I try to start nvmixer,
+I get an error message that nvmixer couldn't load because libstdc++.so.5 was not found. What's wrong?</span>
+    <p> A: This is most likely caused by your system not having
+legacy/compatibility run-time libraries installed. Use your distribution's
+installer or online update mechanism to install these libraries. For example,
+on Red Hat / Fedora distributions, the "Legacy Software Development" package
+contains these libraries.</p>
+  </li>
+
+  <li><span style="font-style: italic;">Q: When I try to start nvmixer,
+I get a "relocation error: ... undefined symbol" &nbsp;message and
+nvmixer doesn't start. What's wrong?</span>
+    <p> A: This is most likely caused by your system not having the Qt
+run-time libraries that nvmixer requires in order to run. Refer to the
+section on nvmixer's <a href="#System_Requirements">system requirements</a>
+for &nbsp;details on how to fix this.</p>
+  </li>
+  <li>
+    <p><span style="font-style: italic;">Q: When I start KDE with the
+nvsound driver loaded, I get an error message, "Sound server fatal
+error: AudioSubSystem::handleIO: write failed &nbsp;len=-1,
+can_write=1024, errno=11 (Resource temporarily unavailable)"</span>.<br>
+    <br>
+A: Open the KDE Control Center (using a menu or the <code>kcontrol</code>
+command). Select "Sound &amp; Multimedia", then select "Sound System".
+Select the "Hardware" tab and, in the "Select the audio device"
+pulldown control, select "Threaded Open Sound System". Select "Apply",
+then exit the Control Center. This should fix the sound server error
+message seen on startup.<br>
+    </p>
+  </li>
+</ul>
+<h2><a name="SECTION000101000000000000000"> Network driver</a></h2>
+<p>
+<ul>
+  <li><span style="font-style: italic;">Q: I've installed the nvnet
+driver and edited the module configuration files, but the forcedeth
+driver still gets loaded.</span>
+    <p> A: Try adding the following line to the system's module configuration file:<p>
+<code>alias forcedeth off</code>
+<p>
+  </li>
+
+
+</p>
+<p> </p>
+<p> </p>
+<h1><a name="FAQ"> Frequently Asked Questions (FAQ)</a></h1>
+<h3>Installer FAQ</h3>
+<ul>
+  <li><span style="font-style: italic;">Q: Why does NVIDIA not provide
+RPMs anymore?<br>
+    <br>
+    </span>A: Not every Linux distribution uses RPMs, and NVIDIA wanted
+a single solution that would work across all Linux distributions.&nbsp;
+As indicated in the NVIDIA Software License, Linux distributions are
+welcome to repackage and redistribute the NVIDIA Linux driver in
+whatever package format they wish.<br>
+  </li>
+</ul>
+<ul>
+  <li><span style="font-style: italic;">Q: How do I extract the
+contents of the .run file without actually installing the driver?</span><br>
+    <br>
+A: Run the installer with the --extract-only command line option.&nbsp;
+This will create a directory which contains the uncompressed contents of
+the .run file.<br>
+    <br>
+  </li>
+  <li><span style="font-style: italic;">Q: How can I see the source
+code to the kernel interface layer?</span><br>
+    <br>
+A: Kernel interface layer source files for the audio driver are in the
+nvsound/main directory of the extracted .run file.&nbsp; The kernel
+interface layer source files for the network driver are in the nvnet
+directory of the extracted .run file.<br>
+    <br>
+  </li>
+  <li><span style="font-style: italic;">Q: Can I add my own precompiled
+kernel interfaces to a .run file?</span><br>
+    <br>
+A: Yes, the "--add-this-kernel" .run file option will unpack the .run
+file, build a precompiled kernel interface for the currently running
+kernel, and repackage the .run file, appending "-custom" to the file
+name.&nbsp; This may be useful, for example, if you administer multiple
+Linux machines, each running the same kernel.<br>
+    <br>
+  </li>
+  <li><span style="font-style: italic;">Q: Where can I find the source
+code for the nforce-installer utility?</span><br
+ style="font-style: italic;">
+    <br>
+A: The nforce-installer utility for the nForce drivers is derived from
+the nvidia-installer utility used for the NVIDIA video drivers.&nbsp;
+The NVIDIA video driver nvidia-installer utility is released under the
+GPL.&nbsp; The latest source code for it is available at:<br>
+    <br>
+    <a href="ftp://download.nvidia.com/XFree86/nvidia-installer/">
+ftp://download.nvidia.com/XFree86/nvidia-installer/</a><br>
+  </li>
+</ul>
+<br>
+<h3>Driver FAQ </h3>
+<ul>
+  <li><i>Q: My IDE hard drive is running very slowly, how can I enable
+DMA mode?</i>
+    <p> A: IDE on nForce is normally supported by the amd74xx driver. First,
+try enabling DMA for your hard drive using the <code>hdparm</code> utility,
+for example,
+<p>
+<pre>
+example# hdparm -d 1 /dev/hdX<br></pre>
+<p>
+where /dev/hdX is the IDE device you wish to enable DMA for. Assuming this
+works, you will probably want to add this to an rc script so it takes effect
+each time the system boots (e.g. <code>/etc/rc.local</code>).
+<p>
+If hdparm fails to enable DMA, it may be that the amd74xx driver is not being
+used because the version in your distibution does not recognize the specific
+revision of nForce IDE controller you are using. In this case, obtain the
+most recent version of the amd74xx driver from the www.kernel.org kernel source
+tree, and rebuild your kernel with this driver included.
+
+    <p> </p>
+  </li>
+  <li><i>Q: Does NVIDIA supply a Linux driver for the USB and USB2.0
+devices?</i>
+    <p> A: The USB and USB2.0 devices use the industry standard OHCI and
+EHCI interfaces, and will work with the standard Linux USB drivers. </p>
+    <p> </p>
+  </li>
+  <li><i>Q: I've rebuilt the Nforce driver, but when I try to insert
+it, I get a message telling me I have unresolved symbols.</i>
+    <p> A. Unresolved symbols are most often caused by a mismatch
+between your kernel sources and your running kernel. They must match for
+the nForce driver modules to build correctly. Please make sure your
+kernel sources are installed and configured to match your running
+kernel. </p>
+    <p> </p>
+  </li>
+  <li><i>Q: Does NVIDIA have a Linux driver for IEEE 1394 on nForce2?</i>
+    <p> A: The Linux 1394 driver supports the nForce2 IEEE 1394 controller in
+kernel versions 2.4.21 and newer. </p>
+  </li>
+  <li><i>Q: Is the nForce IDE controller supported by Linux?</i>
+    <p> A: IDE on nForce is normally supported by the amd74xx driver, though
+the ide-generic driver may be used to provide non-DMA operation. Although
+amd74xx is included in all popular distributions, the specific version
+included in older distributions may not support the latest nForce hardware.
+To remedy this, install the distribution using the ide-generic driver
+(some distros may require you to force the installer to use this by specifying
+<code>insmod=ide-generic</code>), then obtain the most recent version of the
+amd74xx driver from the www.kernel.org kernel source tree, and rebuild your
+kernel with this driver included.</p>
+  </li>
+  <li><i>Q: Are there open source audio drivers for
+nForce hardware?</i>
+    <p> A: Open-source drivers for Intel 810 audio hardware generally work
+with nForce AC97 audio hardware. The Intel driver is called i810_audio or
+snd_intel8x0, depending on which distribution you are using.</p>
+  </li>
+  <li><i>Q: Are there open source networking drivers for
+nForce ethernet hardware?</i>
+    <p> A: Yes, forcedeth is an open-source network driver for nForce
+ethernet hardware. Most distributions include forcedeth, but some distributions
+may require you to manually install it once installation is complete. The
+version of forcedeth included in older distributions may not support the
+latest nForce hardware. To remedy this, obtain the most recent version of the
+forcedeth from the www.kernel.org kernel source tree, and build it as a
+loadable module for your kernel.</p>
+  </li>
+  <li><i>Q: Does nvnet support Wake-On-LAN (WOL) functionality?</i>
+    <p> A: Yes, nvnet supports WOL functionality and there is no need to
+configure it because it is enabled by default.</p>
+  </li>
+
+
+  <li><span style="font-style: italic;">Q: Linux distributions are
+moving towards ALSA as the standard sound driver architecture, but
+nvsound is an OSS driver. Why don't you provide an ALSA driver?</span>
+    <p> A: Our priority in shipping the nvsound driver was to provide
+support for nForce hardware features that were missing in the earlier
+nvaudio driver. NVIDIA plans to provide an nForce ALSA driver in future
+as our resources allow.</p>
+  </li>
+</ul>
+<p> </p>
+<br>
+<br>
+<h1><a name="Acknowledgements"></a>Acknowledgments<br>
+</h1>
+The nforce-installer for the nForce drivers is derived from the
+nvidia-installer used for the NVIDIA video drivers.&nbsp; The video
+driver nvidia-installer was inspired by the loki_update tool:
+(http://www.lokigames.com/development/loki_update.php3).<br>
+<br>
+The self-extracting archive (aka ".run file") is generated using
+makeself.sh: (http://www.megastep.org/makeself/).<br>
+<h1><a name="SECTION000120000000000000000">Change List</a> </h1>
+<p>The most recent changes are at the top of the list. Each bullet
+indicates a public release on NVIDIA's web site. <br>
+</p>
+<p> </p>
+<ul>
+  <li>
+<b>Latest</b>
+<p>
+Fixed 8bit playback support.<br>
+<br>
+Fixed restricted volume ranges for nForce3 and higher.<br>
+<br>
+Fixed nvnet stack overflow bug.<br>
+<br>
+  </li>
+  <li>
+<b>1.0-0306</b>
+<p>
+Fixed nvnet forced mode operation.<br>
+<br>
+Fixed nvnet handling of packets with length field errors.<br>
+<br>
+Fixed nvsound operation with Skype.<br>
+<br>
+Fixed nvsound operation with Xine.<br>
+<br>
+Added support for 2.6.12 kernels.<br>
+<br>
+  </li>
+  <li>
+<b>1.0-0301</b>
+<p>
+Added support for 2.6.10, 2.6.11 kernels.<br>
+<br>
+Added support for restore of nvmixer settings over reboots.<br>
+<br>
+Fixed nvsound compatibility issues with various applications.<br>
+<br>
+Fixed WOL support in nvnet.<br>
+<br>
+Fixed some nvnet performance issues.<br>
+<br>
+  </li>
+
+  <li>
+<b>1.0-0292</b>
+<p>
+Added pre-built 64-bit binaries for various distributions.<br>
+    <br>
+Added support for kernel installations that use separate kernel source
+and generated kernel object trees.<br>
+    <br>
+Fixed nvnet problem that caused rmmod to crash on systems with more
+than one network interface.<br>
+    <br>
+Fixed nvnet build issue on uniprocessor systems that have spinlock
+debugging enabled.<br>
+    <br>
+Fixed nvsound module hangs when APIC is enabled on some distributions.<br>
+    <br>
+Fixed nvsound module bugs causing lack of sound or delay in sound with
+some games.<br>
+    <br>
+  </li>
+
+  <li>
+<b>1.0-0283</b>
+<p>
+Changed installation method to use the new self-extracting
+installer instead of RPM or tarball<br>
+    <br>
+Added support for SoundStorm (Hardware Mixing supported)<br>
+    <br>
+Added AC3 pass-through<br>
+    <br>
+Added support for ethernet driver statistics and configuration
+information through procfs<br>
+    <br>
+Added support for 2.6 series kernels<br>
+    <br>
+Audio control panel executable is now "nvmixer", not "nvaudio"<br>
+    <br>
+  </li>
+
+  <li>
+<b>1.0-0274</b>
+<p>
+Fixed performance problem in network driver that was causing
+stuttering in audio playback<br>
+    <br>
+Added support for nForce3 platforms<br>
+    <br>
+Added support for x86-64 architecture<br>
+    <br>
+Added binary RPMs for SuSE Enterprise Server 8 x86-64<br>
+    <br>
+Added audio control panel application<br>
+    <br>
+Added 6 channel output, audio input selection, speaker selection, per
+channel volume control, and analog / digital enable to audio driver.<br>
+    <br>
+Added GART patch for kernel 2.4.21<br>
+    <br>
+  </li>
+  <li>Added kernel patch to support nForce GART<br>
+    <br>
+Added "spdif_status" module parameter to audio driver to enable/disable
+S/PDIF support for compatability<br>
+    <br>
+Fixed bug in audio driver that was causing MSI nForce board to only use
+2 channels<br>
+    <br>
+Fixed mmap bug in audio driver causing Quake III to hang.<br>
+    <br>
+Fixed RedHat 9 build issue with remap_page_range().<br>
+    <br>
+Fixed problem with rebuilding SRPM on RedHat 9.<br>
+    <br>
+Added RedHat 9 and Mandrake 9.1 binary RPMs.<br>
+  </li>
+</ul>
+<ul>
+  <li>Fixed problem with compiler arguments between gcc3.X and gcc2.X
+    <p> Changed installation script to use lowest available number when
+enumerating network and audio devices in modles.conf </p>
+    <p> Changed audio driver to be self contained source file based off
+i810_audio driver.<br>
+    <br>
+Added SPDIF support to audio driver<br>
+    </p>
+    <p> Updated binary packages for latest releases of RedHat kernels. </p>
+    <p> Added FAQ section to release notes. </p>
+    <p> </p>
+  </li>
+  <li>Added PCI ID support for MCP2 and MCP2 to the i810_audio driver.
+    <p> Some cleanup of spec file and Makefiles </p>
+    <p> SRPMs and tar files now use local system's i810_audio.c file,
+and complain if it's not there; this makes them more distro independent. </p>
+    <p> </p>
+  </li>
+  <li>Changed code to compile properly with gcc3.X and gcc2.X
+    <p> Added support for Mandrake9.0 and Redhat8.0 </p>
+    <p> nForce2 support for network driver </p>
+  </li>
+</ul>
+</body>
+</html>

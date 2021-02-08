@@ -1,0 +1,28 @@
+include		./Makefile.config
+include		./Makefile.macros
+
+INSTALLDIR32	= /kernel/drv
+INSTALLDIR64	= /kernel/drv/amd64
+BINDIR32	= i386
+BINDIR64	= amd64
+
+CFLAGS32	= ${OFLAGS_GCC} ${KFLAGS_GCC} ${AFLAGS_GCC_I386}  \
+		  ${DFLAGS} ${CFGFLAGS} ${VFLAGS}
+
+CFLAGS64	= ${OFLAGS_GCC} ${KFLAGS_GCC} ${AFLAGS_GCC_AMD64}  \
+		  ${DFLAGS} ${CFGFLAGS} ${VFLAGS}
+
+CC	= gcc
+#CC	= i386-pc-solaris2.11-gcc-3.4.3
+#CC	= /opt/gcc/4.4.4/bin/gcc
+LD	= /usr/ccs/bin/ld
+
+all:	${BINDIR32}/${DRV} ${BINDIR64}/${DRV}
+
+install:	install32 install64 /etc/system.no${DRV}
+
+uninstall:	uninstall32 uninstall64
+
+clean:		clean32 clean64
+
+include ./Makefile.common

@@ -1,0 +1,116 @@
+include Makefile.net80211
+#
+# Firmware
+#
+MICROCODE = urtwn_rtl8192cfwT.hex urtwn_rtl8192cfwU.hex
+#
+# Rule for make 32bit binaries
+#
+${BINDIR32}/urtwn: ${BINDIR32}/urtwn_uwgem.o ${BINDIR32}/uwgem.o \
+	${NET80211OBJ32}
+	$(LD) -r ${LDFLAGS} ${BINDIR32}/urtwn_uwgem.o ${BINDIR32}/uwgem.o \
+	${NET80211OBJ32} -o $@
+
+${BINDIR32}/urtwn_uwgem.o: urtwn_uwgem.c uwgem.h if_urtwnreg.h \
+	Makefile.config version ${MICROCODE}
+	$(CC) -c ${CFLAGS32} urtwn_uwgem.c -o $@
+
+${BINDIR32}/uwgem.o:	uwgem.c uwgem.h Makefile.config version
+	$(CC) -c ${CFLAGS32} uwgem.c -o $@
+#
+# Rule for make 64bit binaries
+#
+${BINDIR64}/urtwn: ${BINDIR64}/urtwn_uwgem.o ${BINDIR64}/uwgem.o \
+	${NET80211OBJ64}
+	$(LD) -r ${LDFLAGS} ${BINDIR64}/urtwn_uwgem.o ${BINDIR64}/uwgem.o \
+	${NET80211OBJ64} -o $@
+
+${BINDIR64}/urtwn_uwgem.o: urtwn_uwgem.c uwgem.h if_urtwnreg.h \
+	Makefile.config version ${MICROCODE}
+	$(CC) -c ${CFLAGS64} urtwn_uwgem.c -o $@
+
+${BINDIR64}/uwgem.o:	uwgem.c uwgem.h Makefile.config version
+	$(CC) -c ${CFLAGS64} uwgem.c -o $@
+#
+# Rule for making hex dump of microcode
+#
+urtwn_rtl8192cfwT.hex:	firmware/urtwn-rtl8192cfwT cv
+	./cv < firmware/urtwn-rtl8192cfwT > urtwn_rtl8192cfwT.hex
+
+urtwn_rtl8192cfwU.hex:	firmware/urtwn-rtl8192cfwU cv
+	./cv < firmware/urtwn-rtl8192cfwU > urtwn_rtl8192cfwU.hex
+
+cv:	cv.c
+	$(CC) cv.c -o cv
+
+firmware/urtwn-rtl8192cfwT:	urtwn-firmware-${FW_VERSION}.tgz
+	gunzip -cd urtwn-firmware-${FW_VERSION}.tgz | tar xf -
+
+firmware/urtwn-rtl8192cfwU:	urtwn-firmware-${FW_VERSION}.tgz
+	gunzip -cd urtwn-firmware-${FW_VERSION}.tgz | tar xf -
+#
+# For debugging
+#
+urtwn_uwgem.i:	urtwn_uwgem.c
+	$(CC) -E ${CFLAGS} urtwn_uwgem.c -o $@
+
+#
+# Rule for installation and uninstallation
+#
+install32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root \
+	-g sys ${BINDIR32}/urtwn
+
+install64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root \
+	-g sys ${BINDIR64}/urtwn
+
+/etc/system.nourtwn:	/etc/system
+	cp /etc/system /etc/system.nourtwn
+	echo "exclude: urtwn" >> /etc/system.nourtwn
+
+uninstall32:
+	${RM} ${INSTALLDIR32}/urtwn
+
+uninstall64:
+	${RM} ${INSTALLDIR64}/urtwn
+
+dist:
+	-rm -rf ${DISTDIR}
+	-mkdir  ${DISTDIR}
+	-mkdir  ${DISTDIR}/i386
+	-mkdir  ${DISTDIR}/amd64
+	ln -s amd64 ${DISTDIR}/obj
+	/usr/sbin/install -f ${DISTDIR} -m 444 COPYING
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.txt
+	/usr/sbin/install -f ${DISTDIR} -m 444 version
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.macros
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.common
+	ln -s Makefile.amd64_gcc ${DISTDIR}/Makefile
+	/usr/sbin/install -f ${DISTDIR} -m 444 if_urtwnreg.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 compat.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 uwgem.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 urtwn_uwgem.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 uwgem.c
+	/usr/sbin/install -f ${DISTDIR} -m 755 adddrv.sh
+	/usr/sbin/install -f ${DISTDIR} -m 444 urtwn-firmware-${FW_VERSION}.tgz
+	/usr/sbin/install -f ${DISTDIR} -m 444 cv.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.net80211
+	-mkdir  ${DISTDIR}/net
+	-mkdir  ${DISTDIR}/net80211
+	cp net/*.[ch] ${DISTDIR}/net
+	cp net80211/*.[ch] ${DISTDIR}/net80211
+	cp -r sys ${DISTDIR}
+	cp -r i386 amd64 ${DISTDIR}
+
+clean32:
+	${RM} ${BINDIR32}/*
+	${RM} -rf firmware cv ${MICROCODE}
+
+clean64:
+	${RM} ${BINDIR64}/*

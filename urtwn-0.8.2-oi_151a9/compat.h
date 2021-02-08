@@ -1,0 +1,73 @@
+#define	SWSI	0
+#define	HWSI	1
+#define	HWPI	2
+
+#define VERSION_TEST_CHIP_88C	0x00
+#define VERSION_TEST_CHIP_92C	0x01
+#define VERSION_NORMAL_TSMC_CHIP_88C	0x10
+#define VERSION_NORMAL_TSMC_CHIP_92C	0x11
+#define VERSION_NORMAL_TSMC_CHIP_92C_1T2R	0x13
+#define VERSION_NORMAL_UMC_CHIP_88C_A_CUT	0x30
+#define VERSION_NORMAL_UMC_CHIP_92C_A_CUT	0x31
+#define VERSION_NORMAL_UMC_CHIP_92C_1T2R_A_CUT	0x33
+#define VERSION_NORMA_UMC_CHIP_8723_1T1R_A_CUT	0x34
+#define VERSION_NORMA_UMC_CHIP_8723_1T1R_B_CUT	0x3c
+#define VERSION_NORMAL_UMC_CHIP_88C_B_CUT	0x70
+#define VERSION_NORMAL_UMC_CHIP_92C_B_CUT	0x71
+#define VERSION_NORMAL_UMC_CHIP_92C_1T2R_B_CUT	0x73
+
+#define	RTL8192C_SDIO	0
+#define	RTL8192C_USB	1
+#define	RTL8192C_PCIE	2
+
+#define	Ndis802_11IBSS	0
+#define	Ndis802_11Infrastructure	1
+#define	Ndis802_11AutoUnknown	2
+#define	Ndis802_11InfrastructureMax	3
+#define	Ndis802_11APMode	4
+
+#define	WIRELESS_11B	1
+#define	WIRELESS_11G	2
+#define	WIRELESS_11BG	(WIRELESS_11B | WIRELESS_11G)
+#define	WIRELESS_11A	4
+#define	WIRELESS_11N	8
+#define	WIRELESS_11GN	(WIRELESS_11G | WIRELESS_11N)
+#define	WIRELESS_11BGN	(WIRELESS_11B | WIRELESS_11G | WIRELESS_11N)
+
+#define	DISABLE_VCS	0
+#define	ENABLE_VCS	1
+#define	AUTO_VCS	2
+
+#define	NONE_VCS	0
+#define	RTS_CTS		1
+#define	CTS_TO_SELF	2
+
+#define	PREAMBLE_LONG	1
+#define	PREAMBLE_AUTO	2
+#define	PREAMBLE_SHORT	3
+
+#define	PS_MODE_ACTIVE	0
+#define	PS_MODE_MIN	1
+#define	PS_MODE_MAX	2
+#define	PS_MODE_DTIM	3
+#define	PS_MODE_VOIP	4
+#define	PS_MODE_UAPSD_WMM	5
+#define	PS_MODE_UAPSD	6
+#define	PS_MODE_IBSS	7
+#define	PS_MODE_WWLAN	8
+#define	PM_Radio_Off	9
+#define	PM_Card_Disable	10
+#define	PS_MODE_NUM	11
+
+
+#define NO_LIMIT	0
+#define TWO_MSDU	1
+#define FOUR_MSDU	2
+#define SIX_MSDU	3
+
+#define	RF_1T2R	0
+#define	RF_2T4R	1
+#define	RF_2T2R	2
+#define	RF_1T1R	3
+#define	RF_2T2R_GREEN	4
+#define	RF_819X_MAX_TYPE	5

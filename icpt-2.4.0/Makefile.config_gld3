@@ -1,0 +1,15 @@
+#
+# Common configuration infomations for all platforms
+#
+DRV	= icpt
+
+include version
+
+DFLAGS	= -DDEBUG -DDEBUG_LEVEL=0 -UGEM_DEBUG_LEVEL -UTEST_CRCERR \
+	  -I /home/mrym/opensolaris/usr/src/uts/common
+
+CFGFLAGS = -UUSE_FRAMEID -DMAP_MEM -DGEM_CONFIG_POLLING \
+	   -DGEM_CONFIG_CKSUM_OFFLOAD -DGEM_CONFIG_VLAN \
+	   -DGEM_CONFIG_GLDv3 -DSOLARIS10
+
+LDFLAGS += -dy -N misc/mac -N drv/ip

@@ -1,0 +1,42 @@
+#
+# Common macros for version
+#
+VFLAGS			+= -DVERSION='"${DRV_VERSION}"'
+
+KFLAGS_COMMON		+= -U_NO_LONGLONG -D_KERNEL \
+	-U_ASM_INLINES -D_SYSCALL32 -D_SYSCALL32_IMPL \
+	-Dsun -D__sun -D__SVR4  -DC2_AUDIT
+#
+# Common macros for GCC
+#
+DFLAGS_GCC		+= -D__INLINE__=inline -DGEM_GCC_RUNTIME
+OFLAGS_GCC		+= -O2 ${DFLAGS_GCC}
+KFLAGS_GCC		+= -ffreestanding ${KFLAGS_COMMON} \
+	-Wall -Wno-unknown-pragmas -Wno-missing-braces -Wno-sign-compare \
+	-Wno-parentheses -Wno-uninitialized -Wno-implicit-function-declaration \
+	-Wno-unused -Wno-trigraphs -Wno-char-subscripts -Wno-switch \
+	-Wno-format -Werror
+
+AFLAGS_GCC_I386		+= -Di86pc
+AFLAGS_GCC_AMD64	+= -m64 -mtune=opteron -Di86pc \
+			  -mcmodel=kernel -mno-red-zone -fno-strict-aliasing
+AFLAGS_GCC_SPARC	+= -Dsun4u
+AFLAGS_GCC_SPARCV9	+= -mcpu=v9 -m64 -Dsun4u
+
+#
+# Common macros for Sun C compiler
+#
+DFLAGS_SUNCC		+= -D"__INLINE__="
+OFLAGS_SUNCC		+= -xO2 ${DFLAGS_SUNCC}
+KFLAGS_SUNCC		+= ${KFLAGS_COMMON} \
+	-Xa -xspace -v -xc99=%all -errtags=yes -errwarn=%all -xstrconst
+AFLAGS_SUNCC_I386	+= -Di86pc -xkeepframe=%all
+AFLAGS_SUNCC12_AMD64	+= -m64 -Ui386 -U__i386 -Di86pc -xmodel=kernel -xkeepframe=%all
+AFLAGS_SUNCC_AMD64	+= -xarch=amd64 -Ui386 -U__i386 -Di86pc \
+			   -xmodel=kernel -xkeepframe=%all
+AFLAGS_SUNCC_SPARC	+= -Dsun4u
+AFLAGS_SUNCC_SPARCV9	+= -xarch=v9 -Dsun4u
+#
+# Common flags for lint
+#
+LINTFLAGS		=

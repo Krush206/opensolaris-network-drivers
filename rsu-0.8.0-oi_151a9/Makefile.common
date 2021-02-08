@@ -1,0 +1,116 @@
+include Makefile.net80211
+#
+# Rule for make 32bit binaries
+#
+${BINDIR32}/rsu: ${BINDIR32}/rsu_uwgem.o ${BINDIR32}/uwgem.o ${NET80211OBJ32}
+	$(LD) -r ${LDFLAGS} ${BINDIR32}/rsu_uwgem.o ${BINDIR32}/uwgem.o \
+		${NET80211OBJ32} -o $@
+
+${BINDIR32}/rsu_uwgem.o: rsu_uwgem.c uwgem.h Makefile.config version ${FIRMWARE}
+	$(CC) -c ${CFLAGS32} rsu_uwgem.c -o $@
+
+${BINDIR32}/uwgem.o:	uwgem.c uwgem.h Makefile.config version
+	$(CC) -c ${CFLAGS32} uwgem.c -o $@
+#
+# Rule for make 64bit binaries
+#
+${BINDIR64}/rsu: ${BINDIR64}/rsu_uwgem.o ${BINDIR64}/uwgem.o ${NET80211OBJ64}
+	$(LD) -r ${LDFLAGS} ${BINDIR64}/rsu_uwgem.o ${BINDIR64}/uwgem.o \
+		${NET80211OBJ64} -o $@
+
+${BINDIR64}/rsu_uwgem.o:	rsu_uwgem.c uwgem.h Makefile.config version ${FIRMWARE}
+	$(CC) -c ${CFLAGS64} rsu_uwgem.c -o $@
+
+${BINDIR64}/uwgem.o:	uwgem.c uwgem.h Makefile.config version
+	$(CC) -c ${CFLAGS64} uwgem.c -o $@
+#
+# Rule for making hex dump of microcode
+#
+microcode.hex:	${FIRMWARE}/rtl8712u.bin cv
+	cv < ${FIRMWARE}/rtl8712u.bin > microcode.hex
+
+rsu-rtl8712fw.hex:	firmware/rsu-rtl8712fw cv
+	cv < firmware/rsu-rtl8712fw > rsu-rtl8712fw.hex
+
+rtl8712u2.bin.hex:	rtl8712u2.bin cv
+	cv < rtl8712u2.bin > rtl8712u2.bin.hex
+#
+cv:	cv.c
+	$(CC) cv.c -o cv
+#
+firmware/rsu-rtl8712fw:
+	gunzip -cd rsu-firmware-1.1.tgz | tar xf -
+#
+#
+# For debugging
+#
+rsu_uwgem.i:	rsu_uwgem.c
+	$(CC) -E ${CFLAGS} rsu_uwgem.c -o $@
+
+#
+# Rule for installation and uninstallation
+#
+install32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys \
+	${BINDIR32}/rsu
+
+install64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys \
+	${BINDIR64}/rsu
+
+/etc/system.norsu:	/etc/system
+	cp /etc/system /etc/system.norsu
+	echo "exclude: rsu" >> /etc/system.norsu
+
+uninstall32:
+	${RM} ${INSTALLDIR32}/rsu
+
+uninstall64:
+	${RM} ${INSTALLDIR64}/rsu
+
+dist:
+	-rm -rf ${DISTDIR}
+	-mkdir  ${DISTDIR}
+	-mkdir  ${DISTDIR}/i386
+	-mkdir  ${DISTDIR}/amd64
+	-mkdir  ${DISTDIR}/sparc
+	-mkdir  ${DISTDIR}/sparcv9
+	ln -s amd64 ${DISTDIR}/obj
+	/usr/sbin/install -f ${DISTDIR} -m 444 COPYING
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.txt
+	/usr/sbin/install -f ${DISTDIR} -m 444 version
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.macros
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld3
+	ln -s Makefile.config_gld3 ${DISTDIR}/Makefile.config
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.common
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.net80211
+	ln -s Makefile.amd64_gcc ${DISTDIR}/Makefile
+	/usr/sbin/install -f ${DISTDIR} -m 444 uwgem.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 if_rsureg.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 rsu_uwgem.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 uwgem.c
+	/usr/sbin/install -f ${DISTDIR} -m 755 adddrv.sh
+	/usr/sbin/install -f ${DISTDIR} -m 444 rsu-firmware-1.1.tgz
+	/usr/sbin/install -f ${DISTDIR} -m 444 cv.c
+	-mkdir  ${DISTDIR}/net
+	-mkdir  ${DISTDIR}/net80211
+	cp net/*.[ch] ${DISTDIR}/net
+	cp net80211/*.[ch] ${DISTDIR}/net80211
+	cp -r sys ${DISTDIR}
+	cp -r i386 amd64 ${DISTDIR}
+	cp -r i386 amd64 sparc sparcv9 ${DISTDIR}
+
+clean32:
+	${RM} ${BINDIR32}/*
+	${RM} microcode.hex
+
+clean64:
+	${RM} ${BINDIR64}/*

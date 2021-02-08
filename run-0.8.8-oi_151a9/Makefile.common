@@ -1,0 +1,107 @@
+include Makefile.net80211
+#
+# Rule for make 32bit binaries
+#
+${BINDIR32}/run: ${BINDIR32}/run_uwgem.o ${BINDIR32}/uwgem.o ${NET80211OBJ32}
+	$(LD) -r ${LDFLAGS} ${BINDIR32}/run_uwgem.o ${BINDIR32}/uwgem.o \
+	${NET80211OBJ32} -o $@
+
+${BINDIR32}/run_uwgem.o:	run_uwgem.c rt2860_reg.h rt2870_reg.h rt2870_var.h microcode.hex uwgem.h Makefile.config version
+	$(CC) -c ${CFLAGS32} run_uwgem.c -o $@
+
+${BINDIR32}/uwgem.o:	uwgem.c uwgem.h Makefile.config version
+	$(CC) -c ${CFLAGS32} uwgem.c -o $@
+
+#
+# Rule for make 64bit binaries
+#
+${BINDIR64}/run: ${BINDIR64}/run_uwgem.o ${BINDIR64}/uwgem.o \
+	${NET80211OBJ64}
+	$(LD) -r ${LDFLAGS} ${BINDIR64}/run_uwgem.o ${BINDIR64}/uwgem.o \
+	 ${NET80211OBJ64} -o $@
+
+${BINDIR64}/run_uwgem.o:	run_uwgem.c rt2860_reg.h rt2870_reg.h rt2870_var.h microcode.hex uwgem.h Makefile.config version
+	$(CC) -c ${CFLAGS64} run_uwgem.c -o $@
+
+${BINDIR64}/uwgem.o:	uwgem.c uwgem.h Makefile.config version
+	$(CC) -c ${CFLAGS64} uwgem.c -o $@
+#
+# Rule for making hex dump of microcode
+#
+microcode.hex:	${FIRMWARE}/rt2870.bin cv
+	./cv < ${FIRMWARE}/rt2870.bin > microcode.hex
+
+${FIRMWARE}/rt2870.bin: ${FIRMWARE}.zip
+	unzip -o ${FIRMWARE}.zip
+	touch ${FIRMWARE}/rt2870.bin
+
+cv:	cv.c
+	$(CC) cv.c -o cv
+#
+# For debugging
+#
+run_uwgem.i:	run_uwgem.c
+	$(CC) -E ${CFLAGS} run_uwgem.c -o $@
+
+#
+# Rule for installation and uninstallation
+#
+install32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/run
+
+install64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/run
+
+/etc/system.norun:	/etc/system
+	cp /etc/system /etc/system.norun
+	echo "exclude: run" >> /etc/system.norun
+
+uninstall32:
+	${RM} ${INSTALLDIR32}/run
+
+uninstall64:
+	${RM} ${INSTALLDIR64}/run
+
+dist:
+	-rm -rf ${DISTDIR}
+	-mkdir  ${DISTDIR}
+	-mkdir  ${DISTDIR}/i386
+	-mkdir  ${DISTDIR}/amd64
+	-mkdir  ${DISTDIR}/sparc
+	-mkdir  ${DISTDIR}/sparcv9
+	ln -s amd64 ${DISTDIR}/obj
+	/usr/sbin/install -f ${DISTDIR} -m 444 COPYING
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.txt
+	/usr/sbin/install -f ${DISTDIR} -m 444 version
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.macros
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld3
+	ln -s Makefile.config_gld3 ${DISTDIR}/Makefile.config
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.common
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.net80211
+	ln -s Makefile.amd64_gcc ${DISTDIR}/Makefile
+	/usr/sbin/install -f ${DISTDIR} -m 444 rt2860_reg.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 rt2870_reg.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 rt2870_var.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 uwgem.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 run_uwgem.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 uwgem.c
+	/usr/sbin/install -f ${DISTDIR} -m 755 adddrv.sh
+	/usr/sbin/install -f ${DISTDIR} -m 444 ${FIRMWARE}.zip
+	/usr/sbin/install -f ${DISTDIR} -m 444 cv.c
+	-mkdir  ${DISTDIR}/net
+	-mkdir  ${DISTDIR}/net80211
+	cp net/*.[ch] ${DISTDIR}/net
+	cp net80211/*.[ch] ${DISTDIR}/net80211
+	cp -r sys ${DISTDIR}
+	cp -r i386 amd64 ${DISTDIR}
+
+clean32:
+	${RM} ${BINDIR32}/*
+	${RM} microcode.hex
+
+clean64:
+	${RM} ${BINDIR64}/*

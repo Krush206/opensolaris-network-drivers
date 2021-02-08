@@ -1,0 +1,26 @@
+#
+# Common configuration infomations for all platforms
+#
+DRV	= sige
+include version
+#ONUTSDIR = /home/mrym/opensolaris/usr/src/uts
+#ONUTSDIR = /home/mrym/opensolaris/ws-b92/usr/src/uts
+#ONUTSDIR = /home/mrym/opensolaris/ws-b134/usr/src/uts
+ONUTSDIR = /home/mrym/opensolaris/ws-b124/usr/src/uts
+PUTBACKDIR = ${ONUTSDIR}/common/io/sige
+
+DFLAGS	= -DDEBUG -DDEBUG_LEVEL=0 -DGEM_DEBUG_LEVEL=0 -UTEST_TXDESC_FULL \
+	  -UTEST_RX_EMPTY -UDEBUG_HANG -URX_BUF_SIZE \
+	  -I ${ONUTSDIR}/common -UDEBUG_RESUME -UDEBUG_MULTIFRAGS
+
+CFGFLAGS = -DGEM_CONFIG_POLLING -DGEM_CONFIG_GLDv3 -DGEM_CONFIG_VLAN_HW \
+	   -DGEM_CONFIG_CKSUM_OFFLOAD -DSOLARIS10 \
+	   -UGEM_CONFIG_ND -DGEM_CONFIG_MAC_PROP \
+	   -Unotdef -UNEVER -UGEM_GCC_RUNTIME \
+	   -UGEM_COMPAT -USANITY -UGEM_CONFIG_FMA -UMODULE \
+	   -UGEM_CONFIG_RX_DIRECT -DGEM_CONFIG_TX_DIRECT \
+	   -UOS_PUTBACK \
+	   -DMAP_MEM -DCONFIG_VLAN_HW -DCONFIG_CKSUM_OFFLOAD -UCONFIG_LSO \
+	   -UCONFIG_RX_PAD -UCONFIG_CRC_STRIP
+
+LDFLAGS	+= -dy -N misc/mac -N drv/ip

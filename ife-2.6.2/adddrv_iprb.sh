@@ -1,0 +1,29 @@
+#! /bin/csh -f
+#
+#
+set DEVLIST = ""
+set DEVLIST = ($DEVLIST '"pci8086,1029"')
+set DEVLIST = ($DEVLIST '"pci8086,1229"')
+set DEVLIST = ($DEVLIST '"pci8086,1229.8086.1009"')
+set DEVLIST = ($DEVLIST '"pci8086,1229.8086.100c"')
+set DEVLIST = ($DEVLIST '"pci8086,1229.8086.1012"')
+set DEVLIST = ($DEVLIST '"pci8086,1229.8086.1013"')
+set DEVLIST = ($DEVLIST '"pci8086,1229.8086.1015"')
+set DEVLIST = ($DEVLIST '"pci8086,1229.8086.1016"')
+set DEVLIST = ($DEVLIST '"pci8086,1229.8086.1017"')
+set DEVLIST = ($DEVLIST '"pci8086,1030"')
+set DEVLIST = ($DEVLIST '"pci8086,1031"')
+set DEVLIST = ($DEVLIST '"pci8086,1032"')
+set DEVLIST = ($DEVLIST '"pci8086,1038"')
+set DEVLIST = ($DEVLIST '"pci8086,1039"')
+set DEVLIST = ($DEVLIST '"pci8086,103d"')
+set DEVLIST = ($DEVLIST '"pci8086,1050"')
+set DEVLIST = ($DEVLIST '"pci8086,1059"')
+set DEVLIST = ($DEVLIST '"pci8086,1068"')
+set DEVLIST = ($DEVLIST '"pci8086,1069"')
+set DEVLIST = ($DEVLIST '"pci8086,2449"')
+set DEVLIST = ($DEVLIST '"pci8086,27dc"')
+echo $DEVLIST
+
+/usr/sbin/add_drv -n -v -m '* 0600 root sys' -i "$DEVLIST" iprb
+sync

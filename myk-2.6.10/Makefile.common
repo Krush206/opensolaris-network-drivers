@@ -1,0 +1,132 @@
+#
+# Rule for make 32bit binaries
+#
+${BINDIR32}/myk:	${BINDIR32}/myk_gem.o ${BINDIR32}/gem.o
+	$(LD) ${LDFLAGS} -r ${BINDIR32}/myk_gem.o ${BINDIR32}/gem.o -o $@
+
+${BINDIR32}/myk_gem.o:	myk_gem.c gem_mii.h gem.h Makefile.config version mskreg.h
+	$(CC) -c ${CFLAGS32} myk_gem.c -o $@
+
+${BINDIR32}/gem.o:	gem.c gem_mii.h gem.h Makefile.config version
+	$(CC) -c ${CFLAGS32} gem.c -o $@
+
+#
+# Rule for make 64bit binaries
+#
+${BINDIR64}/myk:	${BINDIR64}/myk_gem.o ${BINDIR64}/gem.o
+	$(LD) ${LDFLAGS} -r ${BINDIR64}/myk_gem.o ${BINDIR64}/gem.o -o $@
+
+${BINDIR64}/myk_gem.o:	myk_gem.c gem_mii.h gem.h Makefile.config version mskreg.h
+	$(CC) -c ${CFLAGS64} myk_gem.c -o $@
+
+${BINDIR64}/gem.o:	gem.c gem_mii.h gem.h Makefile.config version
+	$(CC) -c ${CFLAGS64} gem.c -o $@
+#
+# For debugging
+#
+myk_gem.i:	myk_gem.c
+	$(CC) -E ${CFLAGS64} myk_gem.c -o $@
+
+myk_gem.s:	myk_gem.c
+	$(CC) ${CFLAGS64} -S myk_gem.c
+
+gem.s:	gem.c
+	$(CC) ${CFLAGS64} -S gem.c
+
+#
+# Rule for installation and uninstallation
+#
+install32:
+	/usr/sbin/install -f ${INSTALLDIR32} -m 755 -u root -g sys ${BINDIR32}/myk
+
+install64:
+	/usr/sbin/install -f ${INSTALLDIR64} -m 755 -u root -g sys ${BINDIR64}/myk
+
+/etc/system.nomyk:	/etc/system
+	cp /etc/system /etc/system.nomyk
+	echo "exclude: myk" >> /etc/system.nomyk
+
+uninstall32:
+	${RM} ${INSTALLDIR32}/myk
+
+uninstall64:
+	${RM} ${INSTALLDIR64}/myk
+
+dist:
+	-rm -rf ${DISTDIR}
+	-mkdir  ${DISTDIR}
+	-mkdir  ${DISTDIR}/i386
+	-mkdir  ${DISTDIR}/amd64
+	-mkdir  ${DISTDIR}/sparc
+	-mkdir  ${DISTDIR}/sparcv9
+	ln -s amd64 ${DISTDIR}/obj
+	/usr/sbin/install -f ${DISTDIR} -m 444 COPYING
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.txt
+	/usr/sbin/install -f ${DISTDIR} -m 444 README.japanese-euc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.macros
+	/usr/sbin/install -f ${DISTDIR} -m 444 version
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld2
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.config_gld3
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.i386_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.amd64_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparc_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_gcc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.sparcv9_suncc
+	/usr/sbin/install -f ${DISTDIR} -m 444 Makefile.common
+	ln -s Makefile.amd64_gcc ${DISTDIR}/Makefile
+	ln -s Makefile.config_gld2 ${DISTDIR}/Makefile.config
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem_mii.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 mskreg.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 mykreg.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem.h
+	/usr/sbin/install -f ${DISTDIR} -m 444 myk_gem.c
+	/usr/sbin/install -f ${DISTDIR} -m 444 gem.c
+	/usr/sbin/install -f ${DISTDIR} -m 755 adddrv.sh
+	cp -r i386 amd64 sparc sparcv9 ${DISTDIR}
+
+clean32:
+	${RM} ${BINDIR32}/*
+
+clean64:
+	${RM} ${BINDIR64}/*
+
+putback: ${PUTBACKDIR}/mykreg.h \
+	${PUTBACKDIR}/mskreg.h \
+	${PUTBACKDIR}/myk.c \
+	${PUTBACKDIR}/myk_util.c \
+	${PUTBACKDIR}/myk_util.h \
+	${PUTBACKDIR}/myk_mii.h
+
+${PUTBACKDIR}/myk.c: myk_gem.c
+	sed -e "s/gem\.h/myk_util\.h/" -e "s/gem_mii\.h/myk_mii\.h/" -e "s/gem\.c/myk_util\.c/" myk_gem.c > myk.c
+	unifdef ${CFGFLAGS} myk.c > ${PUTBACKDIR}/myk.c
+	touch -r myk_gem.c  ${PUTBACKDIR}/myk.c
+
+${PUTBACKDIR}/mykreg.h: mykreg.h
+	unifdef ${CFGFLAGS} mykreg.h > ${PUTBACKDIR}/mykreg.h
+	touch -r mykreg.h ${PUTBACKDIR}/mykreg.h
+
+${PUTBACKDIR}/mskreg.h: mskreg.h
+	unifdef ${CFGFLAGS} mskreg.h > ${PUTBACKDIR}/mskreg.h
+	touch -r mskreg.h ${PUTBACKDIR}/mskreg.h
+
+${PUTBACKDIR}/myk_util.h: gem.h
+	sed -e "s/GEM_H/SFE_UTIL_H/" -e "s/gem\.h/myk_util\.h/" gem.h > myk_util.h
+	unifdef ${CFGFLAGS} myk_util.h > ${PUTBACKDIR}/myk_util.h
+	touch -r gem.h ${PUTBACKDIR}/myk_util.h
+
+${PUTBACKDIR}/myk_util.c: gem.c
+	sed -e "s/gem\.h/myk_util\.h/" -e "s/gem_mii\.h/myk_mii\.h/" -e "s/gem\.c/myk_util\.c/" gem.c > myk_util.c
+	unifdef ${CFGFLAGS} myk_util.c > ${PUTBACKDIR}/myk_util.c
+	touch -r gem.c ${PUTBACKDIR}/myk_util.c
+
+${PUTBACKDIR}/myk_mii.h: gem_mii.h
+	sed -e "s/GEM_MII_H/SFE_MII_H/" -e "s/gem_mii/myk_mii/" gem_mii.h > myk_mii.h
+	unifdef ${CFGFLAGS} myk_mii.h > ${PUTBACKDIR}/myk_mii.h
+	touch -r gem_mii.h ${PUTBACKDIR}/myk_mii.h
+
+clean_putback:
+	${RM} ${PUTBACKDIR}/*.[ch]

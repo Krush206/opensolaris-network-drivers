@@ -1,0 +1,21 @@
+include		./Makefile.config
+include		./Makefile.macros
+
+INSTALLDIR32	= /kernel/drv
+BINDIR32	= i386
+
+CFLAGS32	= ${OFLAGS_SUNCC} ${KFLAGS_SUNCC} ${AFLAGS_SUNCC_I386}  \
+		  ${DFLAGS} ${CFGFLAGS} ${VFLAGS}
+
+CC	= cc
+LD	= /usr/ccs/bin/ld
+
+all:	${BINDIR32}/ni ${BINDIR32}/pcni ${BINDIR32}/dp8390
+
+install:	install32 /etc/system.no${DRV}
+
+uninstall:	uninstall32
+
+clean:	clean32
+
+include ./Makefile.common

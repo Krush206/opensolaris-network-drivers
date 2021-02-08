@@ -1,0 +1,33 @@
+include		./Makefile.config
+include		./Makefile.macros
+
+INSTALLDIR32	= /kernel/drv
+INSTALLDIR64	= /kernel/drv/amd64
+BINDIR32	= i386
+BINDIR64	= amd64
+
+CFLAGS32	= ${OFLAGS_GCC} ${KFLAGS_GCC} ${AFLAGS_GCC_I386}  \
+		  ${DFLAGS} ${CFGFLAGS} ${VFLAGS}
+
+CFLAGS64	= ${OFLAGS_GCC} ${KFLAGS_GCC} ${AFLAGS_GCC_AMD64}  \
+		  ${DFLAGS} ${CFGFLAGS} ${VFLAGS}
+
+CC	= gcc
+LD	= /usr/ccs/bin/ld
+
+all:	${BINDIR32}/ni ${BINDIR32}/pcni ${BINDIR32}/dp8390 \
+	${BINDIR64}/ni ${BINDIR64}/pcni ${BINDIR64}/dp8390
+
+install:	install32 install64 /etc/system.no${DRV}
+install_pctos:	install_pctos32 install_pctos64
+
+uninstall:	uninstall32 uninstall64
+uninstall_pctos:	uninstall_pctos32 uninstall_pctos64
+
+clean:		clean32 clean64
+clean_pctos:		clean_pctos32 clean_pctos64
+
+pctos:	${BINDIR32}/pctos ${BINDIR32}/dp8390 \
+	${BINDIR64}/pctos ${BINDIR64}/dp8390
+
+include ./Makefile.common

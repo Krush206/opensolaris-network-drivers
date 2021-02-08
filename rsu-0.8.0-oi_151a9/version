@@ -1,0 +1,9 @@
+KERNEL_NAME:sh=uname -v
+DRV_VERSION=0.8.0-${KERNEL_NAME}
+PKGREV	=
+DISTDIR	= ../rsu-${DRV_VERSION}${PKGREV}
+FIRMWARE= rsu-rtl8712fw.hex	# for bsd driver
+#FIRMWARE= rtl8192fw.hex	# extracted from windows driver
+#FIRMWARE= rtl8712u.bin.hex	# for linux driver
+#FIRMWARE= rtl8712u2.bin.hex	# for linux driver
+#FIRMWARE = farray.hex

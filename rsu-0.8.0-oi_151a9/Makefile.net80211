@@ -1,0 +1,104 @@
+#
+# net80211
+#
+NET80211OBJ32 += ${BINDIR32}/net80211.o
+NET80211OBJ32 += ${BINDIR32}/net80211_crypto.o
+NET80211OBJ32 += ${BINDIR32}/net80211_crypto_ccmp.o
+NET80211OBJ32 += ${BINDIR32}/net80211_crypto_none.o
+NET80211OBJ32 += ${BINDIR32}/net80211_crypto_tkip.o
+NET80211OBJ32 += ${BINDIR32}/net80211_crypto_wep.o
+NET80211OBJ32 += ${BINDIR32}/net80211_ht.o
+NET80211OBJ32 += ${BINDIR32}/net80211_input.o
+NET80211OBJ32 += ${BINDIR32}/net80211_ioctl.o
+NET80211OBJ32 += ${BINDIR32}/net80211_node.o
+NET80211OBJ32 += ${BINDIR32}/net80211_output.o
+NET80211OBJ32 += ${BINDIR32}/net80211_proto.o
+#
+NET80211OBJ64 += ${BINDIR64}/net80211.o
+NET80211OBJ64 += ${BINDIR64}/net80211_crypto.o
+NET80211OBJ64 += ${BINDIR64}/net80211_crypto_ccmp.o
+NET80211OBJ64 += ${BINDIR64}/net80211_crypto_none.o
+NET80211OBJ64 += ${BINDIR64}/net80211_crypto_tkip.o
+NET80211OBJ64 += ${BINDIR64}/net80211_crypto_wep.o
+NET80211OBJ64 += ${BINDIR64}/net80211_ht.o
+NET80211OBJ64 += ${BINDIR64}/net80211_input.o
+NET80211OBJ64 += ${BINDIR64}/net80211_ioctl.o
+NET80211OBJ64 += ${BINDIR64}/net80211_node.o
+NET80211OBJ64 += ${BINDIR64}/net80211_output.o
+NET80211OBJ64 += ${BINDIR64}/net80211_proto.o
+#
+#
+#
+${BINDIR32}/net80211.o:	${NET80211SRC}/net80211.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211.c -o $@
+
+${BINDIR32}/net80211_crypto.o: ${NET80211SRC}/net80211_crypto.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_crypto.c -o $@
+
+${BINDIR32}/net80211_crypto_ccmp.o: ${NET80211SRC}/net80211_crypto_ccmp.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_crypto_ccmp.c -o $@
+
+${BINDIR32}/net80211_crypto_none.o: ${NET80211SRC}/net80211_crypto_none.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_crypto_none.c -o $@
+
+${BINDIR32}/net80211_crypto_tkip.o: ${NET80211SRC}/net80211_crypto_tkip.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_crypto_tkip.c -o $@
+
+${BINDIR32}/net80211_crypto_wep.o: ${NET80211SRC}/net80211_crypto_wep.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_crypto_wep.c -o $@
+
+${BINDIR32}/net80211_ht.o: ${NET80211SRC}/net80211_ht.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_ht.c -o $@
+
+${BINDIR32}/net80211_input.o: ${NET80211SRC}/net80211_input.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_input.c -o $@
+
+${BINDIR32}/net80211_ioctl.o: ${NET80211SRC}/net80211_ioctl.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_ioctl.c -o $@
+
+${BINDIR32}/net80211_node.o: ${NET80211SRC}/net80211_node.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_node.c -o $@
+
+${BINDIR32}/net80211_output.o: ${NET80211SRC}/net80211_output.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_output.c -o $@
+
+${BINDIR32}/net80211_proto.o: ${NET80211SRC}/net80211_proto.c
+	$(CC) -c ${CFLAGS32} ${NET80211SRC}/net80211_proto.c -o $@
+#
+#
+#
+${BINDIR64}/net80211.o:	${NET80211SRC}/net80211.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211.c -o $@
+
+${BINDIR64}/net80211_crypto.o: ${NET80211SRC}/net80211_crypto.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_crypto.c -o $@
+
+${BINDIR64}/net80211_crypto_ccmp.o: ${NET80211SRC}/net80211_crypto_ccmp.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_crypto_ccmp.c -o $@
+
+${BINDIR64}/net80211_crypto_none.o: ${NET80211SRC}/net80211_crypto_none.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_crypto_none.c -o $@
+
+${BINDIR64}/net80211_crypto_tkip.o: ${NET80211SRC}/net80211_crypto_tkip.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_crypto_tkip.c -o $@
+
+${BINDIR64}/net80211_crypto_wep.o: ${NET80211SRC}/net80211_crypto_wep.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_crypto_wep.c -o $@
+
+${BINDIR64}/net80211_ht.o: ${NET80211SRC}/net80211_ht.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_ht.c -o $@
+
+${BINDIR64}/net80211_input.o: ${NET80211SRC}/net80211_input.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_input.c -o $@
+
+${BINDIR64}/net80211_ioctl.o: ${NET80211SRC}/net80211_ioctl.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_ioctl.c -o $@
+
+${BINDIR64}/net80211_node.o: ${NET80211SRC}/net80211_node.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_node.c -o $@
+
+${BINDIR64}/net80211_output.o: ${NET80211SRC}/net80211_output.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_output.c -o $@
+
+${BINDIR64}/net80211_proto.o: ${NET80211SRC}/net80211_proto.c
+	$(CC) -c ${CFLAGS64} ${NET80211SRC}/net80211_proto.c -o $@

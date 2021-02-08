@@ -1,0 +1,20 @@
+#
+# Common configuration infomations for all platforms
+#
+DRV	= rf
+include version
+ONUTSDIR = /home/mrym/opensolaris/usr/src/uts
+PUTBACKDIR = ${ONUTSDIR}/common/io/rf
+
+DFLAGS	= -DDEBUG -DDEBUG_LEVEL=0 -UGEM_DEBUG_LEVEL \
+	  -I ${ONUTSDIR}/common
+
+CFGFLAGS = -DGEM_CONFIG_POLLING -UGEM_CONFIG_GLDv3 -UGEM_CONFIG_VLAN_HW \
+	   -UGEM_CONFIG_CKSUM_OFFLOAD -USOLARIS10 \
+	   -Unotdef -UNEVER -DGEM_GCC_RUNTIME \
+	   -UGEM_COMPAT -USANITY -UGEM_CONFIG_FMA -UMODULE \
+	   -UGEM_CONFIG_RX_DIRECT -DGEM_CONFIG_TX_DIRECT \
+	   -UOS_PUTBACK \
+	   -DCONFIG_TX_POLLING -URX_BUF_NOWRAP -DCONFIG_RX_POLLING
+
+LDFLAGS += -dy -N misc/gld

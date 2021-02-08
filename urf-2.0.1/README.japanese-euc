@@ -1,0 +1,185 @@
+●●●●●●●警告●●●●●●●警告●●●●●●●警告●●●●●●●
+本ソフトのリリースに際してはできるだけの動作確認をしていますが、本ソ
+フトが内包する潜在的問題などの原因により、OSが起動しなくなったり、OS
+動作中に突然パニックするなどの可能性があります。このような事態の発生
+に対して、当方は一切の責任を負いませんのでご理解ください。発生した損
+害（ファイルシステムの破壊によるデータ消失など）やシステム復旧に関し
+ての責任なども負いません。
+
+   本ソフトを使用するか否かは、ご自分の責任で判断してください。
+   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+トラブルへの対処方法は文中に簡単にまとめてあります。
+                                                        村山正之
+●●●●●●●警告●●●●●●●警告●●●●●●●警告●●●●●●●
+
+
+1. 概要
+
+本ソフトは、Realtek社 RTL8150 usb to fast ethernet controlerを使用し
+たusb機器ををSolarisで使用するためのドライバです。ライセンス条件はBSD
+ライセンスです。
+
+
+２．外部仕様と動作条件
+
+デバイスドライバのバイナリのパス:
+	/kernel/drv/urf
+	/kernel/drv/sparcv9/urf (sparc 64bit kernelの場合)
+
+デバイス名: /dev/urfN (Nはユニット番号)
+
+例えば、ifconfig コマンドでのデバイスを指定する場合には、インスタンス
+番号をつけて、
+  ifconfig urf0
+のようになります。
+
+本ソフトの動作確認をしたUSB機器は以下の通りです。
+  rtl8150 -- Melco BUFFALO製 LUAKTX USB ethernetインタフェース
+
+(本ソフトはカードメーカとは一切関係ありませんので、問い合わせなど
+をしないようにお願いします)
+
+対応しているOSバージョンは Solaris10 5/04 以降 です。
+
+動作確認は Solaris Express b114 x86 で行いました。HW構成は CPU:Core2
+Quad Q6600 (マザーボードはAsus社製 P5KPL-CM)です。
+
+
+３．インストールの準備
+
+(1) ドライバのファイルをコピーしてください。
+        # gunzip -cd urf-x.x.x.tar.gz | tar xf -
+
+(2) ネットワークカード用のホスト名を /etc/hosts ファイルに登録してくだ
+   さい。
+
+(3) バイナリの作成(sparcの場合のみ）
+Sparcプラットフォーム上では本ドライバはsolaris8 10/00以降で動作します。
+但しsparcバイナリは配布ファイルには含まれていませんので Forte C コンパ
+イラもしくは gcc 3.x.x でコンパイル願います。テストやインストールの前に
+以下の手順でバイナリを作成してください。
+
+(for sparc 64bit kernel with Forte)
+	% cd /.../urf-x.x.x
+	% rm Makefile
+	% ln -s Makefile.sparcv9_suncc Makefile
+	% rm obj
+	% ln -s sparcv9 obj
+	% /usr/ccs/bin/make
+
+(for sparc 32bit kernel with Forte)
+	% cd /.../urf-x.x.x
+	% rm Makefile
+	% ln -s Makefile.sparc_suncc Makefile
+	% rm obj
+	% ln -s sparc obj
+	% /usr/ccs/bin/make
+
+(for sparc 64bit kernel with gcc3)
+	% cd /.../urf-x.x.x
+	% rm Makefile
+	% ln -s Makefile.sparcv9_gcc Makefile
+	% rm obj
+	% ln -s sparcv9 obj
+	% /usr/ccs/bin/make
+
+(for sparc 32bit kernel with gcc3)
+	% cd /.../urf-x.x.x
+	% rm Makefile
+	% ln -s Makefile.sparc_gcc Makefile
+	% rm obj
+	% ln -s sparc obj
+	% /usr/ccs/bin/make
+
+
+４.インストール
+ (1) 配布されたファイルのディレクトリに移動します。
+      # cd /.../urf-x.x.x
+
+ (2)urfドライバをsolarisに登録します。
+        # /usr/ccs/bin/make install
+        # ./adddrv.sh
+
+ (3) usbデバイスをusbポートに挿し、urfドライバを強制的に認識させます。
+        # devfsadm -i urf
+
+ (4) ネットワークポートの設定をします。
+        # ifconfig urfN plumb ( 通常Nは0から始まる整数です )
+        # ifconfig -a        ( urf0が表示されます。イーサネットアドレスなどを
+				確認してください)
+        # ifconfig urfN HOSTNAME
+        # ifconfig urfN      ( IP アドレスが正しくセットされていることを確認し
+				てください )
+        # ifconfig urfN up   ( 以降、pingやtelnetなどで動作確認できます )
+
+ 　ネットワーク設定をブート時に自動的に行うには、以下のファイルを設定してください。
+        /etc/hostname.urfN
+
+５．トラブルシューティング
+○ 以下のメッセージが /var/adm/messages ファイルに出力される場合
+    NOTE: upfN: link up but auto-negotiation failed.
+
+   このメッセージは Ethernet の結線相手がオートネゴシエーション機能を持っ
+   ていないときに表示されることがあります。
+   usb機器側のオートネゴシエーションをオフにしモードを正しく設定して
+   下さい。これには /kernel/drv/urf.conf に以下の形式で設定を記述して下
+   さい。
+
+   full-duplex=[1|0] speed=[100|10]; #  N はユニット番号
+
+   例えば
+        full-duplex="1" speed=100;   # full-duplex 100Mbps
+        full-duplex="0" speed=10;    # half-duplex 10Mbps
+
+○ドライバロード時（もしくはOSブート時）にOSがpanicし、システムが立ち上
+  がらなくなった場合。
+
+  いったんusb機器をスロットから抜いてOSをブート後、OSへのドライバの登録を
+  抹消してください。OSのドライバ登録の抹消は以下の手順で行えます。
+     rem_drv urf
+
+○リブートしてOSは立ち上がるが、ネットワークインタフェースが動作しない
+  場合
+
+・デバイスは認識されているか？
+  ifconfig -aを実行してください。 urfNが表示されますか？
+  表示されている場合は、ドライバは正しく認識されていますので、IPアドレ
+  スなどのネットワーク設定に問題がある可能性があります。
+
+・ケーブルの接続に問題ないか？
+  ifconfig で urfNが見えるのに通信できない場合は、ケーブルの接続な
+  どに問題がある可能性もあります。
+  この場合は、snoop -P -d urfN で snoopコマンドを起動し、ネットワ
+  ークにつながれた他のホストからパケットを当該ホスト宛に流してください。
+  (ping で可）。snoopがログを正常に出力すれば、ケーブルはつながっていま
+  す。少なくとも受信側はokです。
+
+  送信ができているかどうかは、ほかのホストで同様のことをして、urfから
+  送信したパケットが受信できているかどうか確認してください。
+  ここまでの動作が確認できても、まだIP的につながらないというのは、十中
+  八九、IP関連のネットワーク設定の問題です。
+
+○ネットワークインタフェースの送受信の状態（統計情報）は
+  kstat urf
+  で表示されます。なおsolaris10では netstat -k ではドライバのkstat情報は
+　表示されなくなりました。
+
+テスト中などにSolarisがパニックした場合には、以下の情報をお送りください。
+できる範囲で調査します。
+
+  (1) /var/adm/messages
+
+  (2) prtconf -pv の出力結果 (usb機器を接続しているときのもの）
+
+  (3) prtconf -vD の出力結果 (usb機器を接続しているときのもの）
+
+  (4) OSダンプへのmdb の出力結果
+  Solarisのコアダンプは unix.N と vmcore.N  の２つのファイルから構成さ
+  れており /var/crash/ホスト名のディレクトリにあります。
+
+   'mdb -k unix.N vmcore.N'を実行して以下のサブコマンドの情報
+   $c   (stack trace back が表示されます)
+   $<msgbuf   (OSのメッセージファイルの最後の部分が表示されます)
+   ^D         (mdbを終了します)
+
+以上
