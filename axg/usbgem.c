@@ -1032,7 +1032,7 @@ usbgem_tx_watcher_stop(struct usbgem_dev *dp)
 		mutex_exit(&dp->txlock);
 
 		thread_join(dp->tx_watcher_did);
-		dp->tx_watcher_did = NULL;
+		dp->tx_watcher_did = 0L;
 	}
 }
 
