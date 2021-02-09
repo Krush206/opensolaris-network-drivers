@@ -1146,7 +1146,7 @@ uwgem_watchdog_stop(struct uwgem_dev *dp)
 		dp->watchdog_stop = 1;
 		cv_signal(&dp->watchdog_cv);
 		thread_join(dp->watchdog_did);
-		dp->watchdog_did = NULL;
+		dp->watchdog_did = 0L;
 	}
 }
 
@@ -1580,7 +1580,7 @@ uwgem_lw_stop(struct uwgem_dev *dp)
 		cv_signal(&dp->lw_watcher_wait_cv);
 		mutex_exit(&dp->lw_lock);
 		thread_join(dp->lw_watcher_did);
-		dp->lw_watcher_did = NULL;
+		dp->lw_watcher_did = 0L;
 	}
 }
 
