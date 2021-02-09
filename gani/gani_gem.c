@@ -10102,6 +10102,7 @@ gani_phy_power_down(struct gem_dev *dp)
 		    MII_CONTROL_PWRDN);
 		break;
 	}
+	return 0;
 }
 
 static void
