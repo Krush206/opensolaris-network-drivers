@@ -53,6 +53,7 @@
 
 /* hardware stuff */
 #undef SLOT
+#undef __packed
 #if 1
 #define	__packed	__attribute((packed))
 #else
